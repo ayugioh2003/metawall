@@ -1,0 +1,7 @@
+.settingButton:hover > .icon{
+  @apply bg-primary text-white;
+}
+
+.settingButton:hover > div > .text{
+  @apply text-primary;
+}
