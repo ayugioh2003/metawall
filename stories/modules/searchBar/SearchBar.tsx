@@ -33,7 +33,7 @@ export const SearchBar = ({ className }: SearchBarProps) => {
   return (
     <form
       onSubmit={handleSubmit(handleSearch)}
-      className="flex mb-4"
+      className="flex"
     >
       <Select
         defaultValue={searchData.postType}
@@ -47,7 +47,7 @@ export const SearchBar = ({ className }: SearchBarProps) => {
         register={register("search")}
       />
       <div>
-        <button type="submit" className="bg-primary w-12 h-12 border-2 border-dark border-solid"                >
+        <button type="submit" className="bg-primary w-12 h-12 border-2 border-dark border-solid">
           <SearchOutlined className="text-white text-xl flex items-center justify-center" />
         </button>
       </div>

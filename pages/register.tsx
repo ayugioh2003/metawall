@@ -24,7 +24,7 @@ const Register: NextPage = () => {
       </Head>
 
       <main className="flex justify-center items-center h-full min-h-screen bg-c-bg">
-        <div className="flex max-w-[869px] max-h-[535px] min-w-[600px] border-2 border-solid border-dark py-[60px] px-12 bg-c-bg shadow-main">
+        <div className="flex max-w-[869px] max-h-[535px] min-w-[600px] min-h-[calc(90vh+2.5rem)] border-2 border-solid border-dark py-[60px] px-12 bg-c-bg shadow-main">
           <div className="w-1/2 pr-6">
             <Image src={login} objectFit="cover"></Image>
           </div>
@@ -38,7 +38,7 @@ const Register: NextPage = () => {
             <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
               <Input
                 placeholder="暱稱"
-                className="mt-6"
+                className="mt-4"
                 register={register("userName", { required: true })}
                 error={{
                   errors: errors.userName,
@@ -47,7 +47,7 @@ const Register: NextPage = () => {
               />
               <Input
                 placeholder="Email"
-                className="mt-4"
+                className="mt-3"
                 register={register("email", { required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i })}
                 error={{
                   errors: errors.email,
@@ -57,7 +57,7 @@ const Register: NextPage = () => {
               />
               <Input
                 placeholder="Password"
-                className="mt-4"
+                className="mt-3"
                 register={register("password", { required: true, minLength: 6 })}
                 error={{
                   errors: errors.password,

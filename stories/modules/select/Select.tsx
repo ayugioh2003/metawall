@@ -17,6 +17,6 @@ export const Select = ({ className, register, defaultValue }: SelectProps) => (
       <option value="most-good">讚數最多</option>
       <option value="most-command">留言最多</option>
     </select>
-    <DownOutlined className="absolute top-1/3 right-3" />
+    <DownOutlined className="absolute top-1/4 right-3" />
   </div>
 );
