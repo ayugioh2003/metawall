@@ -10,10 +10,15 @@ import { useForm } from "react-hook-form";
 
 const Register: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit, watch, formState: { errors, isDirty, isValid } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isDirty, isValid },
+  } = useForm();
   const onSubmit = (data: any) => {
     console.log("login", data);
-    router.push("/post")
+    router.push("/post");
   };
   return (
     <div>
@@ -24,7 +29,7 @@ const Register: NextPage = () => {
       </Head>
 
       <main className="flex justify-center items-center h-full min-h-screen bg-c-bg">
-        <div className="flex max-w-[869px] max-h-[535px] min-w-[600px] min-h-[calc(90vh+2.5rem)] border-2 border-solid border-dark py-[60px] px-12 bg-c-bg shadow-main">
+        <div className="flex max-w-[869px] max-h-[635px] min-w-[600px] border-2 border-solid border-dark py-[60px] px-12 bg-c-bg shadow-main">
           <div className="w-1/2 pr-6">
             <Image src={login} objectFit="cover"></Image>
           </div>
@@ -48,7 +53,10 @@ const Register: NextPage = () => {
               <Input
                 placeholder="Email"
                 className="mt-3"
-                register={register("email", { required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i })}
+                register={register("email", {
+                  required: true,
+                  pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i,
+                })}
                 error={{
                   errors: errors.email,
                   requiredError: "請輸入帳號",
@@ -58,18 +66,17 @@ const Register: NextPage = () => {
               <Input
                 placeholder="Password"
                 className="mt-3"
-                register={register("password", { required: true, minLength: 6 })}
+                register={register("password", {
+                  required: true,
+                  minLength: 6,
+                })}
                 error={{
                   errors: errors.password,
                   requiredError: "請輸入密碼",
                   minLengthError: "密碼長度應大於6個字元",
                 }}
               />
-              <Button
-                type="submit"
-                label="註冊"
-                className="my-4"
-              />
+              <Button type="submit" label="註冊" className="my-4" />
             </form>
 
             <Link href="/">
