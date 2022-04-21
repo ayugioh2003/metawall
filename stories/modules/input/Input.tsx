@@ -2,30 +2,29 @@ import React from "react";
 import style from "./input.module.css";
 
 interface InputProps {
-  value?: string;
   placeholder?: string;
   className?: string;
-  errorMessage?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  register?: any;
+  error?: any;
 }
 
 export const Input = ({
-  value = "",
   placeholder = "",
   className,
-  errorMessage,
-  onChange,
+  register,
+  error,
 }: InputProps) => (
   <>
     <input
-      value={value}
       placeholder={placeholder}
-      onChange={onChange}
       type="text"
       className={`${style.input} border-2 border-solid border-dark rounded-none w-full h-12 pl-6 ${className}`}
+      {...register}
     />
-    {errorMessage && (
-      <p className="w-full text-sm text-error mt-1">{errorMessage}</p>
-    )}
+    {error &&
+      <p className="w-full text-sm text-error mt-1">
+        {error[`${error.errors?.type}Error`]}
+      </p>
+    }
   </>
 );

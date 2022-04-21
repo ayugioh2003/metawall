@@ -13,9 +13,14 @@ import user5 from "../public/image/user5.png";
 import user51 from "../public/image/user5-1.png";
 import dayjs from "dayjs";
 import { FollowTitle } from "../stories/modules/followTitle/FollowTitle";
+import { useForm } from "react-hook-form";
 
 export const UserWallPage: NextPage = () => {
+  const { register, handleSubmit } = useForm();
   const [options, setOptions] = useState([{ name: "邊緣小杰", icon: user1 }]);
+  const handleSearch = (data: any) => {
+    console.log(data);
+  };
   const mockData = [
     {
       userName: "邊緣小杰",
@@ -64,15 +69,25 @@ export const UserWallPage: NextPage = () => {
               followQuantity={"987,987"}
               className="mb-4"
             />
-            <div className="flex mb-4">
-              <Select className="mr-3" />
-              <Input onChange={() => {}} />
+            <form
+              onSubmit={handleSubmit(handleSearch)}
+              className="flex mb-4"
+            >
+              <Select
+                className="mr-3"
+                register={register("postType")}
+              />
+              <Input
+                placeholder="搜尋......"
+                className="mb-4"
+                register={register("search")}
+              />
               <div>
                 <button className="bg-primary w-12 h-12 border-2 border-dark border-solid">
                   <SearchOutlined className="text-white text-xl flex items-center justify-center" />
                 </button>
               </div>
-            </div>
+            </form>
             {mockData.map(data => (
               <Post
                 key={data.userName}

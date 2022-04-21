@@ -2,17 +2,19 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import login from "../public/image/login.svg";
 import { Button } from "../stories/modules/button/Button";
 import { Input } from "../stories/modules/input/Input";
 import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isError, setError] = useState(false);
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const onSubmit = (data: any) => {
+    router.push("/post");
+  };
+
   return (
     <div>
       <Head>
@@ -33,28 +35,34 @@ const Home: NextPage = () => {
             <h2 className="text-2xl text-dark font-helvetica font-bold leading-snug mb-9">
               到元宇宙展開全新社交圈
             </h2>
-            <Input
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              placeholder="Email"
-              className="mb-4"
-            />
-            <Input
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Password"
-              className="mb-4"
-            />
-            {isError && (
-              <p className="text-error text-sm">帳號或密碼錯誤，請重新輸入！</p>
-            )}
-            <Button
-              label="登入"
-              className="my-4"
-              onButtonClick={() => {
-                router.push("/post");
-              }}
-            />
+            <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+
+              <Input
+                placeholder="Email"
+                className="mt-4"
+                register={register("email", { required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i })}
+                error={{
+                  errors: errors.email,
+                  requiredError: "請輸入帳號",
+                  patternError: "email 格式有誤",
+                }}
+              />
+              <Input
+                placeholder="Password"
+                className="mt-4"
+                register={register("password", { required: true, minLength: 6 })}
+                error={{
+                  errors: errors.password,
+                  requiredError: "請輸入密碼",
+                  minLengthError: "密碼長度應大於6個字元",
+                }}
+              />
+              <Button
+                type="submit"
+                label="登入"
+                className="my-4"
+              />
+            </form>
             <Link href="/register">
               <span className="text-dark">註冊帳號</span>
             </Link>
