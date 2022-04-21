@@ -1,11 +1,8 @@
-import { SearchOutlined } from "@ant-design/icons";
 import type { NextPage } from "next";
 import { useState } from "react";
 import { Header } from "../stories/modules/header/Header";
-import { Input } from "../stories/modules/input/Input";
 import { OptionList } from "../stories/modules/optionList/OptionList";
 import { Post } from "../stories/modules/Post/Post";
-import { Select } from "../stories/modules/select/Select";
 import bg from "../public/image/image.png";
 import user1 from "../public/image/user.png";
 import user4 from "../public/image/user4.png";
@@ -13,14 +10,10 @@ import user5 from "../public/image/user5.png";
 import user51 from "../public/image/user5-1.png";
 import dayjs from "dayjs";
 import { FollowTitle } from "../stories/modules/followTitle/FollowTitle";
-import { useForm } from "react-hook-form";
+import { SearchBar } from "../stories/modules/searchBar/SearchBar";
 
 export const UserWallPage: NextPage = () => {
-  const { register, handleSubmit } = useForm();
-  const [options, setOptions] = useState([{ name: "邊緣小杰", icon: user1 }]);
-  const handleSearch = (data: any) => {
-    console.log(data);
-  };
+  const [options, setOptions] = useState([]);
   const mockData = [
     {
       userName: "邊緣小杰",
@@ -69,25 +62,7 @@ export const UserWallPage: NextPage = () => {
               followQuantity={"987,987"}
               className="mb-4"
             />
-            <form
-              onSubmit={handleSubmit(handleSearch)}
-              className="flex mb-4"
-            >
-              <Select
-                className="mr-3"
-                register={register("postType")}
-              />
-              <Input
-                placeholder="搜尋......"
-                className="mb-4"
-                register={register("search")}
-              />
-              <div>
-                <button className="bg-primary w-12 h-12 border-2 border-dark border-solid">
-                  <SearchOutlined className="text-white text-xl flex items-center justify-center" />
-                </button>
-              </div>
-            </form>
+            <SearchBar />
             {mockData.map(data => (
               <Post
                 key={data.userName}

@@ -7,11 +7,15 @@ import { Button } from "../stories/modules/button/Button";
 import { Input } from "../stories/modules/input/Input";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import { userState } from "../store/states";
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = (data: any) => {
+    console.log(data);
     router.push("/post");
   };
 
@@ -38,6 +42,7 @@ const Home: NextPage = () => {
             <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
 
               <Input
+                defaultValue={userInfo.email}
                 placeholder="Email"
                 className="mt-4"
                 register={register("email", { required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i })}
@@ -48,6 +53,8 @@ const Home: NextPage = () => {
                 }}
               />
               <Input
+                type="password"
+                defaultValue={userInfo.password}
                 placeholder="Password"
                 className="mt-4"
                 register={register("password", { required: true, minLength: 6 })}

@@ -6,6 +6,8 @@ import { Input } from "../input/Input";
 import user1 from "../../../public/image/user.png";
 import loadingGif from "../../../public/image/loading.gif";
 import { useForm } from "react-hook-form";
+import { useRecoilState } from "recoil";
+import { userState } from "../../../store/states";
 
 interface PostProps {
   userName: string;
@@ -31,6 +33,7 @@ export const Post = ({
   like,
   comments,
 }: PostProps) => {
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const { register, handleSubmit, setValue } = useForm();
   const [loading, setLoading] = useState(false);
   const handleCommand = (data: any) => {
@@ -64,7 +67,7 @@ export const Post = ({
       )}
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
-          <Image width="40px" height="40px" src={user1} />
+          <Image width="40px" height="40px" src={userInfo.avatar} />
         </div>
         <Input
           className="h-10"

@@ -7,7 +7,7 @@ import { Title } from "../stories/modules/title/Title";
 import { Tag } from "../stories/modules/tag/Tag";
 
 export const UpdateUsertPage: NextPage = () => {
-  const [options, setOptions] = useState([{ name: "邊緣小杰", icon: user1 }]);
+  const [options, setOptions] = useState([]);
   return (
     <>
       <Header />

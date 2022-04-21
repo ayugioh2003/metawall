@@ -11,7 +11,7 @@ import { Title } from "../stories/modules/title/Title";
 import { User } from "../stories/modules/user/User";
 
 export const FollowListPage: NextPage = () => {
-  const [options, setOptions] = useState([{ name: "邊緣小杰", icon: user1 }]);
+  const [options, setOptions] = useState([]);
   const mockData = [
     {
       userName: "波吉",

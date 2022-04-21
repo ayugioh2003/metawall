@@ -11,7 +11,7 @@ import { uploadImage } from '../utils/utils';
 
 export const CreatePostPage: NextPage = () => {
   const { register, handleSubmit, formState: { errors, isValid } } = useForm();
-  const [options, setOptions] = useState([{ name: "邊緣小杰", icon: user1 }]);
+  const [options, setOptions] = useState([]);
   const [isError, setIsError] = useState(false);
   const [image, setImage] = useState({
     imageFile: {},

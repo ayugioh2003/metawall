@@ -6,6 +6,8 @@ import { Button } from "../button/Button";
 import { useForm } from "react-hook-form";
 import { uploadImage } from '../../../utils/utils';
 import style from "./tag.module.css";
+import { useRecoilState } from "recoil";
+import { userState } from "../../../store/states";
 
 interface TagProps { }
 
@@ -13,6 +15,7 @@ interface TagProps { }
  * Primary UI component for user interaction
  */
 export const Tag = ({ }: TagProps) => {
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const { register, handleSubmit, setValue, watch, formState: { errors, isValid } } = useForm();
   const [mode, setMode] = useState("updateName");
   const [isError, setIsError] = useState(false);
@@ -21,19 +24,19 @@ export const Tag = ({ }: TagProps) => {
     imagePreview: "",
     imageSize: 0,
   });
-
   const updateUserData = (data: any) => {
-    console.log(data);
+    const { uploadAvatar, userName, gender } = data;
+    console.log({ uploadAvatar, userName, gender });
     setIsError(!isError)
   };
   const updatePassword = (data: any) => {
-    console.log(data);
-    setIsError(!isError)
+    const { password } = data;
+    console.log(password);
   }
-
   useEffect(() => {
-    setValue("gender", "male")
-  }, [setValue])
+    setValue("gender", userInfo.gender)
+    setValue("userName", userInfo.name)
+  }, [setValue, userInfo])
 
   return (
     <div className={`flex flex-col min-w-[500px]`}>
@@ -105,7 +108,7 @@ export const Tag = ({ }: TagProps) => {
                 />
                 <label htmlFor="male" className="mr-6">男性</label>
                 <input
-                  {...register("gender", { required: true, value: { test: 'data' } })}
+                  {...register("gender", { required: true })}
                   type="radio"
                   value="female"
                   id="female"
@@ -126,7 +129,7 @@ export const Tag = ({ }: TagProps) => {
                 </div>
               )}
               <Button
-                type="submit"  
+                type="submit"
                 label="送出更新"
                 active={!isError && isValid}
               />
