@@ -1,31 +1,26 @@
 import type { NextPage } from "next";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import { Header } from "../stories/modules/header/Header";
 import { OptionList } from "../stories/modules/optionList/OptionList";
 import Image from "next/image";
 import user1 from "../public/image/user.png";
 import { Title } from "../stories/modules/title/Title";
 import { Button } from "../stories/modules/button/Button";
+import { useForm } from "react-hook-form";
+import { uploadImage } from '../utils/utils';
 
 export const CreatePostPage: NextPage = () => {
-  const [options, setOptions] = useState([{ name: "邊緣小杰", icon: user1 }]);
-  const [content, setContent] = useState("");
+  const { register, handleSubmit, formState: { errors, isValid } } = useForm();
+  const [options, setOptions] = useState([]);
   const [isError, setIsError] = useState(false);
   const [image, setImage] = useState({
     imageFile: {},
     imagePreview: "",
     imageSize: 0,
   });
-  const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files?.length > 0) {
-      setImage({
-        imageFile: e.target.files[0],
-        imagePreview: URL.createObjectURL(e.target.files[0]),
-        imageSize: e.target.files[0].size,
-      });
-    }
-  };
-
+  const onSubmit = (data: any) => {
+    console.log(data);
+  }
   return (
     <>
       <Header />
@@ -33,18 +28,26 @@ export const CreatePostPage: NextPage = () => {
         <main className="max-w-[1200px] w-full flex justify-between">
           <div className="w-3/4 pr-7">
             <Title text="張貼動態" className="mb-8" />
-            <div className="bg-white border-2 border-solid border-dark rounded-lg flex flex-col items-center p-8">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="bg-white border-2 border-solid border-dark rounded-lg flex flex-col items-center p-8"
+            >
               <div className="w-full">
                 <p className="text-dark mb-1">貼文內容</p>
                 <textarea
-                  value={content}
-                  placeholder="輸入您的貼文內容"
                   rows={6}
-                  onChange={e => setContent(e.target.value)}
-                  className="w-full h-40 text-dark border-2 border-solid border-dark resize-none p-4 mb-4"
+                  className="w-full h-40 text-dark border-2 border-solid border-dark resize-none p-4"
+                  placeholder="輸入您的貼文內容"
+                  {...register("content", { required: true })}
                 />
+                {errors.content?.type === "required" &&
+                  <p className="w-full text-sm text-error mt-1 mb-4">
+                    發表貼文需要有文字內容
+                  </p>
+                }
+
                 <label htmlFor="uploadImage">
-                  <div className="w-[128px] flex justify-center items-center bg-dark text-white rounded py-1 mb-4">
+                  <div className="w-[128px] flex justify-center items-center bg-dark text-white rounded py-1">
                     上傳新圖片
                   </div>
                   <input
@@ -52,11 +55,12 @@ export const CreatePostPage: NextPage = () => {
                     accept="image/jpg,image/jpeg,image/png"
                     id="uploadImage"
                     className="h-0"
-                    onChange={e => uploadImage(e)}
+                    {...register("uploadImage")}
+                    onChange={e => uploadImage(e, setIsError, setImage)}
                   />
                 </label>
                 {image.imagePreview && (
-                  <div className="relative h-40 overflow-hidden rounded-lg border-2 border-dark border-solid mb-6">
+                  <div className="relative w-40 h-40 overflow-hidden rounded-lg border-2 border-dark border-solid mb-6">
                     <Image
                       src={image.imagePreview}
                       layout="fill"
@@ -72,12 +76,12 @@ export const CreatePostPage: NextPage = () => {
               )}
               <div className="w-3/5">
                 <Button
+                  type="submit"
                   label="送出新貼文"
-                  disable={!content}
-                  onButtonClick={() => setIsError(!isError)}
+                  disable={isError || !isValid}
                 />
               </div>
-            </div>
+            </form>
           </div>
           <div className="w-1/4">
             <OptionList options={options} />

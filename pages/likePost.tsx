@@ -12,7 +12,7 @@ import { User } from "../stories/modules/user/User";
 import { LikeOutlined, RightCircleOutlined } from "@ant-design/icons";
 
 export const LikePostPage: NextPage = () => {
-  const [options, setOptions] = useState([{ name: "邊緣小杰", icon: user1 }]);
+  const [options, setOptions] = useState([]);
   const mockData = [
     {
       userName: "波吉",
