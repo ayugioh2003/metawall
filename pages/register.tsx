@@ -2,15 +2,18 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import login from "../public/image/login.svg";
 import { Button } from "../stories/modules/button/Button";
 import { Input } from "../stories/modules/input/Input";
 import { useForm } from "react-hook-form";
 
 const Register: NextPage = () => {
+  const router = useRouter();
   const { register, handleSubmit, watch, formState: { errors, isDirty, isValid } } = useForm();
   const onSubmit = (data: any) => {
     console.log("login", data);
+    router.push("/post")
   };
   return (
     <div>

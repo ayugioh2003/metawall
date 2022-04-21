@@ -4,6 +4,7 @@ import { User } from "../user/User";
 import { SettingButton } from "../settingButton/SettingButton";
 import { BellOutlined, LikeOutlined } from "@ant-design/icons";
 import { StaticImageData } from "next/image";
+import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 import { userState } from "../../../store/states";
 
@@ -15,6 +16,7 @@ interface OptionListProps {
  * Primary UI component for user interaction
  */
 export const OptionList = ({ options }: OptionListProps) => {
+  const router = useRouter();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const newOptions = [
     { name: userInfo.name, icon: userInfo.avatar },
@@ -25,6 +27,7 @@ export const OptionList = ({ options }: OptionListProps) => {
     <Button
       label="張貼動態"
       className="hover:bg-active hover:text-black mb-6"
+      onButtonClick={() => router.push("/createPost") }
     />
     <div className="w-full flex flex-col pl-2">
       {newOptions.map(option => (
