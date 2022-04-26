@@ -57,6 +57,83 @@ export const postState = atom({
   ],
 });
 
+export const followListState = atom({
+  key: "followListState",
+  default: [
+    {
+      userName: "波吉",
+      userIcon: user1,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      followTime: dayjs().format("DD"),
+      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+    {
+      userName: "多魯米",
+      userIcon: user51,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      followTime: dayjs().format("DD"),
+      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+    {
+      userName: "卡克",
+      userIcon: user4,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      followTime: dayjs().format("DD"),
+      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+    {
+      userName: "希琳",
+      userIcon: user5,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      followTime: dayjs().format("DD"),
+      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+    {
+      userName: "多瑪斯",
+      userIcon: user1,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      followTime: dayjs().format("DD"),
+      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+  ],
+});
+
+export const likePostState = atom({
+  key: "likePostState",
+  default: [
+    {
+      userName: "波吉",
+      userIcon: user1,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+    {
+      userName: "多魯米",
+      userIcon: user51,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+    {
+      userName: "卡克",
+      userIcon: user4,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+    {
+      userName: "希琳",
+      userIcon: user5,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+    {
+      userName: "多瑪斯",
+      userIcon: user1,
+      date: dayjs().format("YYYY/MM/DD HH:mm"),
+      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
+    },
+  ],
+});
+
 export const searchState = atom({
   key: "searchState",
   default: {

@@ -11,45 +11,12 @@ import user51 from "../public/image/user5-1.png";
 import dayjs from "dayjs";
 import { FollowTitle } from "../stories/modules/followTitle/FollowTitle";
 import { SearchBar } from "../stories/modules/searchBar/SearchBar";
+import { useRecoilState } from "recoil";
+import { postState } from "../store/states";
 
 export const UserWallPage: NextPage = () => {
   const [options, setOptions] = useState([]);
-  const mockData = [
-    {
-      userName: "邊緣小杰",
-      userIcon: user1,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      content: "外面看起來就超冷.... 我決定回被窩繼續睡....>.<",
-      src: bg,
-      comments: [
-        {
-          userName: "希琳",
-          userIcon: user4,
-          content: "真的～我已經準備冬眠了",
-          date: dayjs().format("YYYY/MM/DD HH:mm"),
-        },
-        {
-          userName: "波吉",
-          userIcon: user51,
-          content: "會嗎？我沒穿衣服都不覺得冷",
-          date: dayjs().format("YYYY/MM/DD HH:mm"),
-        },
-      ],
-    },
-    {
-      userName: "波吉",
-      userIcon: user51,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      content: "我一定要成為很棒棒的國王！",
-      like: 3,
-    },
-    {
-      userName: "阿爾敏",
-      userIcon: user5,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      content: "各位我有一個作戰計畫",
-    },
-  ];
+  const [postData, setPostData] = useRecoilState(postState);
   return (
     <>
       <Header />
@@ -63,7 +30,7 @@ export const UserWallPage: NextPage = () => {
               className="mb-4"
             />
             <SearchBar />
-            {mockData.map(data => (
+            {postData.map(data => (
               <Post
                 key={data.userName}
                 userName={data.userName}
