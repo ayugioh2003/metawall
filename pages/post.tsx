@@ -27,7 +27,7 @@ export const PostPage: NextPage = () => {
             <SearchBar />
             {postData.map(data => (
               <Post
-                key={data.userName}
+                key={data._id}
                 userName={data.userName}
                 content={data.content}
                 src={data.src}
