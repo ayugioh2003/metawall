@@ -32,8 +32,3 @@ export const EmailTemplate = Template.bind({});
 EmailTemplate.args = {
   placeholder: "Email",
 };
-
-export const ErrorTemplateComponent = ErrorTemplate.bind({});
-ErrorTemplateComponent.args = {
-  errorMessage: "暱稱至少 2 個字元以上",
-};
