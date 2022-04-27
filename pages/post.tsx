@@ -15,8 +15,10 @@ export const PostPage: NextPage = () => {
   const [postData, setPostData] = useRecoilState(postState);
 
   useEffect(() => {
-    getPosts(setPostData);
-  })
+    getPosts().then(data => {
+      console.log(data)
+    })
+  }, [])
 
   return (
     <>

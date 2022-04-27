@@ -2,10 +2,9 @@ import axios from '../utils/axiosConfig';
 
 const path = '/posts';
 
-export async function getPosts(setData: Function) {
-  await axios.get(path)
+export async function getPosts() {
+  return await axios.get(path)
     .then(response => response.data.data)
-    .then(data => setData(data))
     .catch(error => console.log(error));
 }
 
