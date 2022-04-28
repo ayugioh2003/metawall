@@ -16,9 +16,9 @@ export const PostPage: NextPage = () => {
 
   useEffect(() => {
     getPosts().then(data => {
-      console.log(data)
+      setPostData(data);
     })
-  }, [])
+  }, [setPostData])
 
   return (
     <>
