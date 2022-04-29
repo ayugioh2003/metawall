@@ -3,24 +3,47 @@ import { useState } from "react";
 import { Header } from "../stories/modules/header/Header";
 import { OptionList } from "../stories/modules/optionList/OptionList";
 import Image from "next/image";
-import user1 from "../public/image/user.png";
+import { useRouter } from "next/router";
 import { Title } from "../stories/modules/title/Title";
 import { Button } from "../stories/modules/button/Button";
 import { useForm } from "react-hook-form";
 import { uploadImage } from '../utils/utils';
+import { addPost } from "../api/posts";
+import { useRecoilState } from "recoil";
+import { userState } from "../store/states";
 
 export const CreatePostPage: NextPage = () => {
-  const { register, handleSubmit, formState: { errors, isValid } } = useForm();
+  const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isValid }
+  } = useForm({ mode: 'onChange' });
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const [options, setOptions] = useState([]);
   const [isError, setIsError] = useState(false);
-  const [image, setImage] = useState({
+  const defaultImage = {
     imageFile: {},
     imagePreview: "",
     imageSize: 0,
-  });
+  };
+  const [image, setImage] = useState(defaultImage);
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    addPost({
+      content: data.content,
+      userName: userInfo.name,
+    });
+
+    setValue("content", "");
+    setValue("uploadImage", "");
+    setImage(defaultImage);
+
+    router.push("/post");
+    router.reload;
   }
+
   return (
     <>
       <Header />

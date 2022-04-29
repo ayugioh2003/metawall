@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "axios": "^0.27.1",
     "dayjs": "^1.11.0",
     "next": "12.1.4",
     "react": "18.0.0",

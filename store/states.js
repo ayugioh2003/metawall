@@ -21,6 +21,7 @@ export const postState = atom({
   key: "postState",
   default: [
     {
+      _id: "postId-1",
       userName: "邊緣小杰",
       userIcon: user1,
       date: dayjs().format("YYYY/MM/DD HH:mm"),
@@ -28,12 +29,14 @@ export const postState = atom({
       src: bg,
       comments: [
         {
+          _id: "comment-1",
           userName: "希琳",
           userIcon: user4,
           content: "真的～我已經準備冬眠了",
           date: dayjs().format("YYYY/MM/DD HH:mm"),
         },
         {
+          _id: "comment-2",
           userName: "波吉",
           userIcon: user51,
           content: "會嗎？我沒穿衣服都不覺得冷",
@@ -42,6 +45,7 @@ export const postState = atom({
       ],
     },
     {
+      _id: "postId-2",
       userName: "波吉",
       userIcon: user51,
       date: dayjs().format("YYYY/MM/DD HH:mm"),
@@ -49,6 +53,7 @@ export const postState = atom({
       like: 3,
     },
     {
+      _id: "postId-3",
       userName: "阿爾敏",
       userIcon: user5,
       date: dayjs().format("YYYY/MM/DD HH:mm"),

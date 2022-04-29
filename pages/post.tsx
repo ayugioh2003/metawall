@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "../stories/modules/header/Header";
 import { OptionList } from "../stories/modules/optionList/OptionList";
 import { Post } from "../stories/modules/Post/Post";
@@ -8,10 +8,18 @@ import { Toolbar } from "../stories/modules/toolbar/Toolbar";
 import { SearchBar } from "../stories/modules/searchBar/SearchBar";
 import { useRecoilState } from "recoil";
 import { postState } from "../store/states";
+import { getPosts } from "../api/posts";
 
 export const PostPage: NextPage = () => {
   const [options, setOptions] = useState([{ name: "杰哥後援會", icon: user5 }]);
   const [postData, setPostData] = useRecoilState(postState);
+
+  useEffect(() => {
+    getPosts().then(data => {
+      setPostData(data);
+    })
+  }, [setPostData])
+
   return (
     <>
       <Header />
@@ -21,11 +29,11 @@ export const PostPage: NextPage = () => {
             <SearchBar />
             {postData.map(data => (
               <Post
-                key={data.userName}
+                key={data._id}
                 userName={data.userName}
                 content={data.content}
                 src={data.src}
-                userIcon={data.userIcon}
+                userIcon={user5}//{data.userIcon}
                 date={data.date}
                 like={data.like}
                 comments={data.comments}
