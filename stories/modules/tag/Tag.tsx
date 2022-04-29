@@ -16,7 +16,13 @@ interface TagProps { }
  */
 export const Tag = ({ }: TagProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const { register, handleSubmit, setValue, watch, formState: { errors, isValid } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors, isValid }
+  } = useForm({ mode: 'onChange' });
   const [mode, setMode] = useState("updateName");
   const [isError, setIsError] = useState(false);
   const [image, setImage] = useState({
@@ -131,17 +137,18 @@ export const Tag = ({ }: TagProps) => {
               <Button
                 type="submit"
                 label="送出更新"
-                active={!isError && isValid}
+                active={!isError}
+                disable={!isValid}
               />
             </div>
           </>
         ) : (
           <>
             <div className="w-3/5" >
-              <p className="text-dark mb-1">輸入新密碼</p>
+              <p className="text-dark">輸入新密碼</p>
               <Input
                 placeholder="請輸入新密碼"
-                className="mb-4"
+                className="mt-1"
                 register={register("password", { required: true, minLength: 6 })}
                 error={{
                   errors: errors.password,
@@ -149,22 +156,27 @@ export const Tag = ({ }: TagProps) => {
                   minLengthError: "密碼長度應大於6個字元",
                 }}
               />
-              <p className="text-dark mb-1">再次輸入</p>
+              <p className="text-dark mt-4">再次輸入</p>
               <Input
                 placeholder="再次輸入新密碼"
-                className="mb-6"
-                register={register("repeatPassword", { required: true, minLength: 6, pattern: new RegExp(`^${watch("password")}$`, "g") })}
+                className="mt-1"
+                register={register("repeatPassword", { required: true, minLength: 6 })}
                 error={{
                   errors: errors.repeatPassword,
                   requiredError: "請重新輸入密碼",
-                  patternError: "密碼不一致",
                   minLengthError: "密碼長度應大於6個字元",
                 }}
               />
+              {watch("password") !== watch("repeatPassword") &&
+                <p className="w-full text-sm text-error mt-1">
+                  密碼不一致
+                </p>
+              }
               <Button
+                className="mt-6"
                 type="submit"
                 label="重設密碼"
-                disable={!isValid}
+                disable={!isValid || watch("password") !== watch("repeatPassword")}
               />
             </div>
           </>

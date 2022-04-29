@@ -13,9 +13,8 @@ const Register: NextPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors, isDirty, isValid },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({ mode: 'onChange' });
   const onSubmit = (data: any) => {
     console.log("login", data);
     router.push("/post");
@@ -76,7 +75,7 @@ const Register: NextPage = () => {
                   minLengthError: "密碼長度應大於6個字元",
                 }}
               />
-              <Button type="submit" label="註冊" className="my-4" />
+              <Button type="submit" label="註冊" className="my-4" disable={!isValid} />
             </form>
 
             <Link href="/">

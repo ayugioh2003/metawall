@@ -31,6 +31,7 @@ export const Button = ({
     className={`w-full border-2 border-solid  rounded-lg font-bold text-white py-3 ${
       disable ? "bg-disable border-disable-border" : "bg-primary border-dark"
     } ${active ? "bg-active text-black" : ""} ${className}`}
+    disabled={disable}
     onClick={onButtonClick}
   >
     {label}

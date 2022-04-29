@@ -14,7 +14,12 @@ import { userState } from "../store/states";
 
 export const CreatePostPage: NextPage = () => {
   const router = useRouter()
-  const { register, handleSubmit, setValue, formState: { errors, isValid } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isValid }
+  } = useForm({ mode: 'onChange' });
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [options, setOptions] = useState([]);
   const [isError, setIsError] = useState(false);
