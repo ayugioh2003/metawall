@@ -25,7 +25,7 @@ export const Input = ({
   <>
     <input
       defaultValue={defaultValue}
-      value={value}
+      // value={value}
       placeholder={placeholder}
       type={type}
       className={`${style.input} border-2 border-solid border-dark rounded-none w-full h-12 pl-6 ${className}`}
