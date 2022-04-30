@@ -70,7 +70,7 @@ export const Post = ({
           <Image width="40px" height="40px" src={userInfo.avatar} />
         </div>
         <Input
-          className="h-10"
+          size="small"
           placeholder="留言......"
           register={register("commentContent")}
         />
