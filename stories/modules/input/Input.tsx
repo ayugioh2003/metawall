@@ -7,6 +7,7 @@ interface InputProps {
   value?: string;
   placeholder?: string;
   className?: string;
+  size?: string;
   register?: any;
   error?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -18,6 +19,7 @@ export const Input = ({
   placeholder = "",
   value = "",
   className,
+  size,
   register,
   error,
   onChange,
@@ -28,7 +30,7 @@ export const Input = ({
       // value={value}
       placeholder={placeholder}
       type={type}
-      className={`${style.input} border-2 border-solid border-dark rounded-none w-full h-12 pl-6 ${className}`}
+      className={`${style.input} border-2 border-solid border-dark rounded-none w-full pl-6 ${size ==="small" ? "h-10" : "h-12"} ${className ? className : ""}`}
       onChange={onChange}
       {...register}
     />
