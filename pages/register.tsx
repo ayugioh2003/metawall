@@ -14,7 +14,7 @@ const Register: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm({ mode: 'onChange' });
+  } = useForm({ mode: "onChange" });
   const onSubmit = (data: any) => {
     console.log("login", data);
     router.push("/post");
@@ -63,19 +63,25 @@ const Register: NextPage = () => {
                 }}
               />
               <Input
+                type="password"
                 placeholder="Password"
                 className="mt-3"
                 register={register("password", {
                   required: true,
-                  minLength: 6,
+                  pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&^_-]{8,}$/,
                 })}
                 error={{
                   errors: errors.password,
                   requiredError: "請輸入密碼",
-                  minLengthError: "密碼長度應大於6個字元",
+                  patternError: "密碼長度應大於8個字元，並字母與數字混合",
                 }}
               />
-              <Button type="submit" label="註冊" className="my-4" disable={!isValid} />
+              <Button
+                type="submit"
+                label="註冊"
+                className="my-4"
+                disable={!isValid}
+              />
             </form>
 
             <Link href="/">
