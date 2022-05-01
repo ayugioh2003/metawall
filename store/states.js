@@ -11,7 +11,7 @@ export const userState = atom({
   default: {
     name: "邊緣小杰",
     email: "jay@metawall.com",
-    password: "jay123",
+    password: "jay12345",
     avatar: user1,
     gender: "male",
   },
