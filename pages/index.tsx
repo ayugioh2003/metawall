@@ -13,7 +13,11 @@ import { userState } from "../store/states";
 const Home: NextPage = () => {
   const router = useRouter();
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const onSubmit = (data: any) => {
     console.log(data);
     router.push("/post");
@@ -40,12 +44,14 @@ const Home: NextPage = () => {
               到元宇宙展開全新社交圈
             </h2>
             <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-
               <Input
                 defaultValue={userInfo.email}
                 placeholder="Email"
                 className="mt-4"
-                register={register("email", { required: true, pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i })}
+                register={register("email", {
+                  required: true,
+                  pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i,
+                })}
                 error={{
                   errors: errors.email,
                   requiredError: "請輸入帳號",
@@ -57,18 +63,17 @@ const Home: NextPage = () => {
                 defaultValue={userInfo.password}
                 placeholder="Password"
                 className="mt-4"
-                register={register("password", { required: true, minLength: 6 })}
+                register={register("password", {
+                  required: true,
+                  minLength: 8,
+                })}
                 error={{
                   errors: errors.password,
                   requiredError: "請輸入密碼",
-                  minLengthError: "密碼長度應大於6個字元",
+                  minLengthError: "密碼長度應大於8個字元",
                 }}
               />
-              <Button
-                type="submit"
-                label="登入"
-                className="my-4"
-              />
+              <Button type="submit" label="登入" className="my-4" />
             </form>
             <Link href="/register">
               <span className="text-dark">註冊帳號</span>
