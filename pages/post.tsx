@@ -17,8 +17,8 @@ export const PostPage: NextPage = () => {
   useEffect(() => {
     getPosts().then(data => {
       setPostData(data);
-    })
-  }, [setPostData])
+    });
+  }, [setPostData]);
 
   return (
     <>
@@ -27,19 +27,20 @@ export const PostPage: NextPage = () => {
         <main className="max-w-[1200px] w-full flex justify-between">
           <div className="w-full md:w-3/4 md:pr-7">
             <SearchBar />
-            {postData.map(data => (
-              <Post
-                key={data._id}
-                userName={data.userName}
-                content={data.content}
-                src={data.src}
-                userIcon={user5}//{data.userIcon}
-                date={data.date}
-                like={data.like}
-                comments={data.comments}
-                className="mb-4"
-              />
-            ))}
+            {postData.length > 0 &&
+              postData.map(data => (
+                <Post
+                  key={data._id}
+                  userName={data.userName}
+                  content={data.content}
+                  src={data.src}
+                  userIcon={user5} //{data.userIcon}
+                  date={data.date}
+                  like={data.like}
+                  comments={data.comments}
+                  className="mb-4"
+                />
+              ))}
           </div>
           <div className="hidden md:block md:w-1/4">
             <OptionList options={options} />

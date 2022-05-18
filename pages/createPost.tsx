@@ -7,19 +7,20 @@ import { useRouter } from "next/router";
 import { Title } from "../stories/modules/title/Title";
 import { Button } from "../stories/modules/button/Button";
 import { useForm } from "react-hook-form";
-import { uploadImage } from '../utils/utils';
+import { uploadImage } from "../utils/utils";
 import { addPost } from "../api/posts";
+import { fetchUploadImage } from "../api/uploadImage";
 import { useRecoilState } from "recoil";
 import { userState } from "../store/states";
 
 export const CreatePostPage: NextPage = () => {
-  const router = useRouter()
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isValid }
-  } = useForm({ mode: 'onChange' });
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [options, setOptions] = useState([]);
   const [isError, setIsError] = useState(false);
@@ -30,19 +31,24 @@ export const CreatePostPage: NextPage = () => {
   };
   const [image, setImage] = useState(defaultImage);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
+    let imageUrl = "";
+    if (!!image?.imageFile) {
+      const imageData = await fetchUploadImage(image.imageFile);
+      imageUrl = imageData.data.data.url;
+    }
     addPost({
       content: data.content,
       userName: userInfo.name,
+      image: imageUrl,
     });
-
     setValue("content", "");
     setValue("uploadImage", "");
     setImage(defaultImage);
 
     router.push("/post");
     router.reload;
-  }
+  };
 
   return (
     <>
@@ -63,11 +69,11 @@ export const CreatePostPage: NextPage = () => {
                   placeholder="輸入您的貼文內容"
                   {...register("content", { required: true })}
                 />
-                {errors.content?.type === "required" &&
+                {errors.content?.type === "required" && (
                   <p className="w-full text-sm text-error mt-1 mb-4">
                     發表貼文需要有文字內容
                   </p>
-                }
+                )}
 
                 <label htmlFor="uploadImage">
                   <div className="w-[128px] flex justify-center items-center bg-dark text-white rounded py-1">
