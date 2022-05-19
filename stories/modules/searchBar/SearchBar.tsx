@@ -5,7 +5,8 @@ import { Input } from "../../../stories/modules/input/Input";
 import { Select } from "../../../stories/modules/select/Select";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { searchState } from "../../../store/states";
+import { postState, searchState } from "../../../store/states";
+import { getPosts } from "../../../api/posts";
 
 interface SearchBarProps {
   className?: string;
@@ -16,25 +17,25 @@ interface SearchBarProps {
  */
 export const SearchBar = ({ className }: SearchBarProps) => {
   const [searchData, setSearchData] = useRecoilState(searchState);
+  const [postData, setPostData] = useRecoilState(postState);
   const { register, handleSubmit, watch } = useForm();
   const handleSearch = (data: any) => {
-    console.log(data);
+    getPosts(`q=${data.search}`).then(data => {
+      setPostData(data);
+    });
   };
   useEffect(() => {
-    const subscription = watch((value) => {
+    const subscription = watch(value => {
       setSearchData({
         postType: value.postType as string,
         search: value.search as string,
       });
-      console.log(value)
+      console.log(value);
     });
     return () => subscription.unsubscribe();
   }, [watch, setSearchData]);
   return (
-    <form
-      onSubmit={handleSubmit(handleSearch)}
-      className="flex"
-    >
+    <form onSubmit={handleSubmit(handleSearch)} className="flex">
       <Select
         defaultValue={searchData.postType}
         className="mr-3"
@@ -47,9 +48,13 @@ export const SearchBar = ({ className }: SearchBarProps) => {
         register={register("search")}
       />
       <div>
-        <button type="submit" className="bg-primary w-12 h-12 border-2 border-dark border-solid">
+        <button
+          type="submit"
+          className="bg-primary w-12 h-12 border-2 border-dark border-solid"
+        >
           <SearchOutlined className="text-white text-xl flex items-center justify-center" />
         </button>
       </div>
-    </form>)
+    </form>
+  );
 };
