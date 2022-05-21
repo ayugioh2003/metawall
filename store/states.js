@@ -6,12 +6,26 @@ import user51 from "../public/image/user5-1.png";
 import bg from "../public/image/image.png";
 import dayjs from "dayjs";
 
+export const loginState = atom({
+  key: "loginState",
+  default: {
+    isLogin: false,
+  },
+});
+
+export const loadingState = atom({
+  key: "loadingState",
+  default: {
+    isLoading: false,
+  },
+});
+
 export const userState = atom({
   key: "userState",
   default: {
-    name: "邊緣小杰",
-    email: "jay@metawall.com",
-    password: "jay12345",
+    name: "",
+    email: "",
+    password: "",
     avatar: user1,
     gender: "male",
   },
