@@ -15,9 +15,7 @@ export const loginState = atom({
 
 export const loadingState = atom({
   key: "loadingState",
-  default: {
-    isLoading: false,
-  },
+  default: false,
 });
 
 export const userState = atom({
