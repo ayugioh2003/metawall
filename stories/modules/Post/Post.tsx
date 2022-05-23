@@ -40,7 +40,9 @@ export const Post = ({
     console.log(data);
   };
   return (
-    <div className={`bg-white border-2 border-b-4 border-dark border-solid rounded-lg w-full min-w-[300px] p-6 ${className}`}>
+    <div
+      className={`bg-white border-2 border-b-4 border-dark border-solid rounded-lg w-full min-w-[300px] p-6 ${className}`}
+    >
       <User
         userName={userName}
         width="45px"
@@ -67,7 +69,7 @@ export const Post = ({
       )}
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
-          <Image width="40px" height="40px" src={userInfo.avatar} />
+          <Image width="40px" height="40px" src={userInfo.avatar ?? ""} />
         </div>
         <Input
           size="small"
@@ -77,17 +79,18 @@ export const Post = ({
         <div className="w-[128px] relative">
           <button
             type="submit"
-            className={`w-full h-10 border-solid border-dark border-2 ${loading ? "bg-active text-dark" : "bg-primary text-white"
-              }`}
+            className={`w-full h-10 border-solid border-dark border-2 ${
+              loading ? "bg-active text-dark" : "bg-primary text-white"
+            }`}
             onClick={() => {
               setLoading(true);
               setTimeout(() => {
-                setLoading(false)
+                setLoading(false);
                 setValue("commentContent", "", {
                   shouldValidate: true,
-                  shouldDirty: true
-                })
-              }, 2000)
+                  shouldDirty: true,
+                });
+              }, 2000);
             }}
           >
             留言
