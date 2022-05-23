@@ -11,7 +11,10 @@ export async function getPosts(query?: string) {
         content: post.userContent,
       }))
     )
-    .catch(error => console.log(error));
+    .catch(error => {
+      console.log(error);
+      return [];
+    });
 }
 
 export async function addPost(data: any) {
