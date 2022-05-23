@@ -67,7 +67,6 @@ const Home: NextPage = () => {
             </h2>
             <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
               <Input
-                defaultValue={userInfo.email}
                 placeholder="Email"
                 className="mt-4"
                 register={register("email", {
@@ -82,7 +81,6 @@ const Home: NextPage = () => {
               />
               <Input
                 type="password"
-                defaultValue={userInfo.password}
                 placeholder="Password"
                 className="mt-4"
                 register={register("password", {

@@ -21,10 +21,11 @@ export const loadingState = atom({
 export const userState = atom({
   key: "userState",
   default: {
-    name: "",
-    email: "",
-    password: "",
-    avatar: user1,
+    id: "628b4816313de1e5a54387f9",
+    name: "Jay",
+    email: "jay@gmail.com",
+    password: "1234qwer",
+    avatar: "https://mopcon.org/api/2019/speaker/images/web/speaker_38",
     gender: "male",
   },
 });
