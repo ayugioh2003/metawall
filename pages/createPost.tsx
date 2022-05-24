@@ -11,9 +11,11 @@ import { uploadImage } from "../utils/utils";
 import { addPost } from "../api/posts";
 import { fetchUploadImage } from "../api/uploadImage";
 import { useRecoilState } from "recoil";
-import { userState } from "../store/states";
+import { loadingState } from "../store/states";
+import Swal from "sweetalert2";
 
 export const CreatePostPage: NextPage = () => {
+  const [isLoading, setIsLoading] = useRecoilState(loadingState);
   const router = useRouter();
   const {
     register,
@@ -21,7 +23,6 @@ export const CreatePostPage: NextPage = () => {
     setValue,
     formState: { errors, isValid },
   } = useForm({ mode: "onChange" });
-  const [userInfo, setUserInfo] = useRecoilState(userState);
   const [options, setOptions] = useState([]);
   const [isError, setIsError] = useState(false);
   const defaultImage = {
@@ -32,20 +33,30 @@ export const CreatePostPage: NextPage = () => {
   const [image, setImage] = useState(defaultImage);
 
   const onSubmit = async (data: any) => {
+    setIsLoading(true);
     let imageUrl = "";
     if (!!image?.imageFile) {
       const imageData = await fetchUploadImage(image.imageFile);
+      if (!imageData.data) {
+        Swal.fire({
+          title: "Error!",
+          text: "圖片上傳失敗，請稍後再試",
+          icon: "error",
+          confirmButtonText: "我知道了",
+        });
+        return;
+      }
       imageUrl = imageData.data.data.url;
     }
     addPost({
       content: data.content,
-      userName: userInfo.name,
       image: imageUrl,
     });
     setValue("content", "");
     setValue("uploadImage", "");
     setImage(defaultImage);
 
+    setIsLoading(false);
     router.push("/post");
     router.reload;
   };
