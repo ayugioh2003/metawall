@@ -3,7 +3,7 @@ import Image, { StaticImageData } from "next/image";
 
 interface UserProps {
   userName: string;
-  src: StaticImageData;
+  src: StaticImageData | string;
   width?: string;
   height?: string;
   date?: string;
