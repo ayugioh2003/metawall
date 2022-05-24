@@ -11,7 +11,7 @@ import { uploadImage } from "../utils/utils";
 import { addPost } from "../api/posts";
 import { fetchUploadImage } from "../api/uploadImage";
 import { useRecoilState } from "recoil";
-import { userState, loadingState } from "../store/states";
+import { loadingState } from "../store/states";
 import Swal from "sweetalert2";
 
 export const CreatePostPage: NextPage = () => {
@@ -23,7 +23,6 @@ export const CreatePostPage: NextPage = () => {
     setValue,
     formState: { errors, isValid },
   } = useForm({ mode: "onChange" });
-  const [userInfo, setUserInfo] = useRecoilState(userState);
   const [options, setOptions] = useState([]);
   const [isError, setIsError] = useState(false);
   const defaultImage = {
@@ -38,7 +37,7 @@ export const CreatePostPage: NextPage = () => {
     let imageUrl = "";
     if (!!image?.imageFile) {
       const imageData = await fetchUploadImage(image.imageFile);
-      if(!imageData.data){
+      if (!imageData.data) {
         Swal.fire({
           title: "Error!",
           text: "圖片上傳失敗，請稍後再試",
@@ -50,7 +49,6 @@ export const CreatePostPage: NextPage = () => {
       imageUrl = imageData.data.data.url;
     }
     addPost({
-      user: userInfo.id,
       content: data.content,
       image: imageUrl,
     });
