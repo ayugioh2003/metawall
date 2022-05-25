@@ -7,16 +7,22 @@ interface LoginParam {
   password: string;
 }
 
-export async function fetchLogin(data?: LoginParam) {
+interface SingupParam {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export async function fetchLogin(data: LoginParam) {
   return await axios
     .post(`${path}/login`, data)
     .then(response => response)
     .catch(error => error);
 }
 
-export async function signup(data: string) {
+export async function fetchSignup(data: SingupParam) {
   return await axios
-    .post(`${path}/signup`)
+    .post(`${path}/signup`, data)
     .then(response => response)
     .catch(error => error);
 }
