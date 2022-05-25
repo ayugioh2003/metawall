@@ -7,16 +7,56 @@ import login from "../public/image/login.svg";
 import { Button } from "../stories/modules/button/Button";
 import { Input } from "../stories/modules/input/Input";
 import { useForm } from "react-hook-form";
+import { fetchLogin, fetchSignup } from "../api/auth";
+import Swal from "sweetalert2";
+import { useRecoilState } from "recoil";
+import { userState, loginState, loadingState } from "../store/states";
 
 const Register: NextPage = () => {
   const router = useRouter();
+  const [_isLoading, setIsLoading] = useRecoilState(loadingState);
+  const [_userInfo, setUserInfo] = useRecoilState(userState);
+  const [_handlelLogin, setHandlelLogin] = useRecoilState(loginState);
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({ mode: "onChange" });
-  const onSubmit = (data: any) => {
-    console.log("login", data);
+  const onSubmit = async (data: any) => {
+    setIsLoading(true);
+    const res = await fetchSignup(data);
+    if (res.status !== 200) {
+      setIsLoading(false);
+      Swal.fire({
+        title: "Error!",
+        text: res.message,
+        icon: "error",
+        confirmButtonText: "請修正後重試一次",
+      });
+      return;
+    }
+    if (res?.status === 200) {
+      const loginRes = await fetchLogin({
+        email: data.email,
+        password: data.password,
+      });
+      if (!loginRes.data) {
+        setIsLoading(false);
+        Swal.fire({
+          title: "Error!",
+          text: "登入失敗",
+          icon: "error",
+          confirmButtonText: "我知道了",
+        });
+        return;
+      }
+      setUserInfo(loginRes.data.data.user);
+      setHandlelLogin({ isLogin: true });
+      if (typeof window !== "undefined") {
+        localStorage.setItem("token", loginRes.data.data.token);
+      }
+    }
+    setIsLoading(false);
     router.push("/post");
   };
   return (
@@ -43,7 +83,7 @@ const Register: NextPage = () => {
               <Input
                 placeholder="暱稱"
                 className="mt-4"
-                register={register("userName", { required: true })}
+                register={register("name", { required: true })}
                 error={{
                   errors: errors.userName,
                   requiredError: "請輸入暱稱",
