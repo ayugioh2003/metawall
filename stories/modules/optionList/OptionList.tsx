@@ -20,39 +20,41 @@ export const OptionList = ({ options }: OptionListProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const newOptions = [
     { name: userInfo.name, icon: userInfo.avatar },
-    ...options
+    ...options,
   ];
 
-  return (<div className="border-dark border-2 border-solid flex flex-col justify-center items-center px-6 py-8">
-    <Button
-      label="張貼動態"
-      className="hover:bg-active hover:text-black mb-6"
-      onButtonClick={() => router.push("/createPost") }
-    />
-    <div className="w-full flex flex-col pl-2">
-      {newOptions.map(option => (
-        <User
-          className="mt-4"
-          key={option.name}
-          userName={option.name}
-          src={option.icon}
-          width="50px"
-          height="50px"
+  return (
+    <div className="border-dark border-2 border-solid flex flex-col justify-center items-center px-6 py-8">
+      <Button
+        label="張貼動態"
+        className="hover:bg-active hover:text-black mb-6"
+        onButtonClick={() => router.push("/createPost")}
+      />
+      <div className="w-full flex flex-col pl-2">
+        {newOptions.map(option => (
+          <User
+            className="mt-4"
+            key={option.name}
+            userName={option.name}
+            avatar={option.icon}
+            width="50px"
+            height="50px"
+          />
+        ))}
+        <SettingButton
+          text="追蹤名單"
+          icon={
+            <BellOutlined className="text-xl flex justify-center items-center" />
+          }
+          className="my-5"
         />
-      ))}
-      <SettingButton
-        text="追蹤名單"
-        icon={
-          <BellOutlined className="text-xl flex justify-center items-center" />
-        }
-        className="my-5"
-      />
-      <SettingButton
-        text="我按讚的文章"
-        icon={
-          <LikeOutlined className="text-xl flex justify-center items-center" />
-        }
-      />
+        <SettingButton
+          text="我按讚的文章"
+          icon={
+            <LikeOutlined className="text-xl flex justify-center items-center" />
+          }
+        />
+      </div>
     </div>
-  </div>);
-}
+  );
+};

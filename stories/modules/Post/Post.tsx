@@ -1,39 +1,27 @@
 import React, { useState } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { User } from "../user/User";
 import { LikeOutlined } from "@ant-design/icons";
 import { Input } from "../input/Input";
-import user1 from "../../../public/image/user.png";
 import loadingGif from "../../../public/image/loading.gif";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { userState } from "../../../store/states";
-
-interface PostProps {
-  userName: string;
-  content: string;
-  src?: StaticImageData;
-  userIcon: StaticImageData;
-  date?: string;
-  className?: string;
-  like?: number;
-  comments?: any[];
-}
+import { PostProps } from "../../../pages/post";
 
 /**
  * Primary UI component for user interaction
  */
 export const Post = ({
-  userName,
-  userIcon,
+  user,
   content,
   src,
-  date,
+  createdAt,
   className,
   like,
   comments,
 }: PostProps) => {
-  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [userInfo, _setUserInfo] = useRecoilState(userState);
   const { register, handleSubmit, setValue } = useForm();
   const [loading, setLoading] = useState(false);
   const handleCommand = (data: any) => {
@@ -44,11 +32,11 @@ export const Post = ({
       className={`bg-white border-2 border-b-4 border-dark border-solid rounded-lg w-full min-w-[300px] p-6 ${className}`}
     >
       <User
-        userName={userName}
+        userName={user.name}
         width="45px"
         height="45px"
-        src={userIcon}
-        date={date}
+        avatar={user.avatar}
+        date={createdAt}
         className="mb-4"
       />
       <p className="mb-4">{content}</p>
@@ -109,7 +97,7 @@ export const Post = ({
               userName={comment.userName}
               width="45px"
               height="45px"
-              src={comment.userIcon}
+              avatar={comment.userIcon}
               date={comment.date}
               className="mb-4"
             />

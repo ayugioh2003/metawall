@@ -9,9 +9,26 @@ import { SearchBar } from "../stories/modules/searchBar/SearchBar";
 import { useRecoilState } from "recoil";
 import { postState } from "../store/states";
 import { getPosts } from "../api/posts";
+import { StaticImageData } from "next/image";
+
+export interface PostProps {
+  _id?: string;
+  user: {
+    name: string;
+    avatar: string | StaticImageData;
+  };
+  content: string;
+  src?: StaticImageData;
+  createdAt?: string;
+  className?: string;
+  like?: number;
+  comments?: any[];
+}
 
 export const PostPage: NextPage = () => {
-  const [options, setOptions] = useState([{ name: "杰哥後援會", icon: user5 }]);
+  const [options, _setOptions] = useState([
+    { name: "杰哥後援會", icon: user5 },
+  ]);
   const [postData, setPostData] = useRecoilState(postState);
 
   useEffect(() => {
@@ -28,16 +45,15 @@ export const PostPage: NextPage = () => {
           <div className="w-full md:w-3/4 md:pr-7">
             <SearchBar />
             {postData.length > 0 &&
-              postData.map(data => (
+              postData.map((data: PostProps) => (
                 <Post
-                  key={data._id}
-                  userName={data.userName}
-                  content={data.content}
-                  src={data.src}
-                  userIcon={user5} //{data.userIcon}
-                  date={data.date}
-                  like={data.like}
-                  comments={data.comments}
+                  key={data?._id}
+                  user={data?.user}
+                  content={data?.content}
+                  src={data?.src}
+                  createdAt={data?.createdAt}
+                  like={data?.like}
+                  comments={data?.comments}
                   className="mb-4"
                 />
               ))}
