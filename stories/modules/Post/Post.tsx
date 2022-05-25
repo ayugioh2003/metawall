@@ -42,7 +42,7 @@ export const Post = ({
       <p className="mb-4">{content}</p>
       {src && (
         <div className="relative h-[157px] mb-5">
-          <Image src={src ?? ""} layout="fill" />
+          <Image src={src ?? "/"} layout="fill" />
         </div>
       )}
       {like ? (
@@ -50,14 +50,14 @@ export const Post = ({
           <LikeOutlined className="text-xl flex items-center mr-2" /> {like}
         </div>
       ) : (
-        <div className="flex items-center mb-5">
+        <div className="flex items-center mb-5  text-light">
           <LikeOutlined className="text-xl flex items-center mr-2" />
           成為第一個按讚的朋友
         </div>
       )}
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
-          <Image width="40px" height="40px" src={userInfo.avatar ?? ""} />
+          <Image width="40px" height="40px" src={userInfo.avatar ?? "/"} />
         </div>
         <Input
           size="small"

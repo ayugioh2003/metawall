@@ -31,20 +31,15 @@ export const User = ({
 }: UserProps) => (
   <div className={`flex mr-2.5 ${className}`}>
     <div className="flex justify-center items-center mr-4">
-      {typeof avatar !== "string" ? (
+      {typeof avatar !== "string" || !avatar ? (
         <Image
           width={width}
           alt="avatar"
           height={height}
-          src={avatar ?? userDefault}
+          src={!!avatar ? avatar : userDefault}
         />
       ) : (
-        <img
-          width={width}
-          alt="avatar"
-          height={height}
-          src={!!avatar ? avatar : "../../../public/image/user_default.png"}
-        />
+        <img width={width} alt="avatar" height={height} src={avatar} />
       )}
     </div>
     <div
