@@ -21,20 +21,20 @@ const Template: ComponentStory<typeof User> = args => <User {...args} />;
 export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
-  src: avatar,
+  avatar,
   width: "50px",
   height: "50px",
 };
 
 export const BottomLine = Template.bind({});
 BottomLine.args = {
-  src: avatar,
+  avatar,
   bottomLine: true,
 };
 
 export const Date = Template.bind({});
 Date.args = {
-  src: avatar,
+  avatar,
   width: "45px",
   height: "45px",
   date: dayjs().format("YYYY/MM/DD HH:mm"),

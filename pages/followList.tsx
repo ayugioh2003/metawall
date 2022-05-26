@@ -25,7 +25,7 @@ export const FollowListPage: NextPage = () => {
                 <User
                   userName={follow.userName}
                   follow={follow.followTime}
-                  src={follow.userIcon}
+                  avatar={follow.userIcon}
                 />
                 <p className="text-dark">追蹤時間：{follow.followFromTime}</p>
               </div>

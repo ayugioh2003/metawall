@@ -26,7 +26,7 @@ export const LikePostPage: NextPage = () => {
                 <User
                   userName={post.userName}
                   post={post.postFromTime}
-                  src={post.userIcon}
+                  avatar={post.userIcon}
                 />
                 <ul className="flex mr-6">
                   <li className="flex flex-col mr-9">

@@ -3,16 +3,12 @@ import { useState } from "react";
 import { Header } from "../stories/modules/header/Header";
 import { OptionList } from "../stories/modules/optionList/OptionList";
 import { Post } from "../stories/modules/Post/Post";
-import bg from "../public/image/image.png";
-import user1 from "../public/image/user.png";
 import user4 from "../public/image/user4.png";
-import user5 from "../public/image/user5.png";
-import user51 from "../public/image/user5-1.png";
-import dayjs from "dayjs";
 import { FollowTitle } from "../stories/modules/followTitle/FollowTitle";
 import { SearchBar } from "../stories/modules/searchBar/SearchBar";
 import { useRecoilState } from "recoil";
 import { postState } from "../store/states";
+import { PostProps } from "./post";
 
 export const UserWallPage: NextPage = () => {
   const [options, setOptions] = useState([]);
@@ -30,14 +26,13 @@ export const UserWallPage: NextPage = () => {
               className="mb-4"
             />
             <SearchBar />
-            {postData.map(data => (
+            {postData.map((data: PostProps) => (
               <Post
-                key={data.userName}
-                userName={data.userName}
+                key={data._id}
+                user={data.user}
                 content={data.content}
                 src={data.src}
-                userIcon={data.userIcon}
-                date={data.date}
+                createdAt={data.createdAt}
                 like={data.like}
                 comments={data.comments}
                 className="mb-4"

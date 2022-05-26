@@ -1,9 +1,11 @@
 import React from "react";
 import Image, { StaticImageData } from "next/image";
+import dayjs from "dayjs";
+import userDefault from "../../../public/image/user_default.png";
 
 interface UserProps {
   userName: string;
-  src: StaticImageData | string;
+  avatar: StaticImageData | string;
   width?: string;
   height?: string;
   date?: string;
@@ -18,7 +20,7 @@ interface UserProps {
  */
 export const User = ({
   userName = "Member",
-  src,
+  avatar,
   width = "30px",
   height = "30px",
   bottomLine,
@@ -29,11 +31,16 @@ export const User = ({
 }: UserProps) => (
   <div className={`flex mr-2.5 ${className}`}>
     <div className="flex justify-center items-center mr-4">
-      {src && <>
-        {typeof src !== "string" ?
-          <Image width={width} alt="avatar" height={height} src={src} /> :
-          <img width={width} alt="avatar" height={height} src={src} />}
-      </>}
+      {typeof avatar !== "string" || !avatar ? (
+        <Image
+          width={width}
+          alt="avatar"
+          height={height}
+          src={!!avatar ? avatar : userDefault}
+        />
+      ) : (
+        <img width={width} alt="avatar" height={height} src={avatar} />
+      )}
     </div>
     <div
       className={`flex flex-col justify-center ${
@@ -41,7 +48,11 @@ export const User = ({
       }`}
     >
       <p className="font-bold hover:text-primary hover:underline">{userName}</p>
-      {date && <p className="text-xs text-light">{date}</p>}
+      {date && (
+        <p className="text-xs text-light">
+          {dayjs(date).format("YYYY/MM/DD HH:mm")}
+        </p>
+      )}
       {follow && <p className="text-xs text-light">您已追蹤{follow}天</p>}
       {post && <p className="text-xs text-light">發文時間：{post}</p>}
     </div>
