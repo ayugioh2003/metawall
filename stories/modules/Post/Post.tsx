@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { User } from "../user/User";
+import { LikeButton } from "../likeButton/LikeButton";
 import { LikeOutlined } from "@ant-design/icons";
 import { Input } from "../input/Input";
 import loadingGif from "../../../public/image/loading.gif";
@@ -20,6 +21,7 @@ export const Post = ({
   className,
   like,
   comments,
+  _id,
 }: PostProps) => {
   const [userInfo, _setUserInfo] = useRecoilState(userState);
   const { register, handleSubmit, setValue } = useForm();
@@ -45,16 +47,7 @@ export const Post = ({
           <Image src={src ?? "/"} layout="fill" />
         </div>
       )}
-      {like ? (
-        <div className="flex items-center mb-5">
-          <LikeOutlined className="text-xl flex items-center mr-2" /> {like}
-        </div>
-      ) : (
-        <div className="flex items-center mb-5  text-light">
-          <LikeOutlined className="text-xl flex items-center mr-2" />
-          成為第一個按讚的朋友
-        </div>
-      )}
+      <LikeButton postId={_id as string} />
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
           <Image width="40px" height="40px" src={userInfo.avatar ?? "/"} />

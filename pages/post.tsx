@@ -48,6 +48,7 @@ export const PostPage: NextPage = () => {
               postData.map((data: PostProps) => (
                 <Post
                   key={data?._id}
+                  _id={data?._id}
                   user={data?.user}
                   content={data?.content}
                   src={data?.src}
