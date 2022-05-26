@@ -40,7 +40,7 @@ export const Header = ({ className }: HeaderProps) => {
           <div
             className={`${
               !dropDown && "invisible"
-            } absolute -bottom-32 left-0 w-[178px] border-2 border-solid border-dark bg-white z-10`}
+            } absolute -bottom-32 right-1 w-[178px] border-2 border-solid border-dark bg-white z-10`}
           >
             <p
               className="py-2 border-b-2 border-b-solid border-b-dark text-center hover:bg-c-bg cursor-pointer"
@@ -64,7 +64,7 @@ export const Header = ({ className }: HeaderProps) => {
           <div
             className={`${
               !dropDown && "invisible"
-            } absolute -bottom-[132px] left-1 w-[178px] h-32 border-2 border-solid border-dark bg-white`}
+            } absolute -bottom-[132px] right-0 w-[178px] h-32 border-2 border-solid border-dark bg-white`}
           ></div>
         </div>
       </div>
