@@ -2,10 +2,12 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { check } from "../api/auth";
-import { loginState, loadingState } from "../store/states";
+import { fetchCurrentUser } from "../api/user";
+import { loginState, userState, loadingState } from "../store/states";
 
 export const HandleLogin = (props: any) => {
   const [handlelLogin, setHandlelLogin] = useRecoilState(loginState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
   const router = useRouter();
   const pushPostRouter = ["/", "/register"];
@@ -20,6 +22,9 @@ export const HandleLogin = (props: any) => {
         if (isSuccess) {
           setHandlelLogin({ isLogin: true });
           pushPostRouter.includes(router.pathname) && router.push("/post");
+          await fetchCurrentUser().then(res => {
+            setUserInfo(res.data.data);
+          });
         } else {
           router.push("/");
         }
