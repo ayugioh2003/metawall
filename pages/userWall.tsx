@@ -33,7 +33,7 @@ export const UserWallPage: NextPage = () => {
                 content={data.content}
                 src={data.src}
                 createdAt={data.createdAt}
-                like={data.like}
+                likes={data.likes}
                 comments={data.comments}
                 className="mb-4"
               />
