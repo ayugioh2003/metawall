@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { userState } from "../../../store/states";
 import { PostProps } from "../../../pages/post";
+import userDefault from "../../../public/image/user_default.png";
 
 /**
  * Primary UI component for user interaction
@@ -47,10 +48,18 @@ export const Post = ({
           <Image src={src ?? "/"} layout="fill" />
         </div>
       )}
-      {_id && likes && <LikeButton postId={_id as string} likes={likes as string[]} />}
+      {_id && likes && <LikeButton postId={_id ?? ""} likes={likes ?? []} />}
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
-          <Image width="40px" height="40px" src={userInfo.avatar ?? "/"} />
+          <Image
+            width="40px"
+            height="40px"
+            src={
+              userInfo.avatar && userInfo.avatar !== " "
+                ? userInfo.avatar
+                : userDefault
+            }
+          />
         </div>
         <Input
           size="small"
