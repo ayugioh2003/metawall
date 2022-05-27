@@ -21,7 +21,7 @@ export interface PostProps {
   src?: StaticImageData;
   createdAt?: string;
   className?: string;
-  like?: number;
+  likes?: string[];
   comments?: any[];
 }
 
@@ -53,7 +53,7 @@ export const PostPage: NextPage = () => {
                   content={data?.content}
                   src={data?.src}
                   createdAt={data?.createdAt}
-                  like={data?.like}
+                  likes={data?.likes}
                   comments={data?.comments}
                   className="mb-4"
                 />

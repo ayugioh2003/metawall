@@ -6,6 +6,7 @@ import { loadingState, userState } from "../../../store/states";
 
 interface LikeButtonProps {
   postId: string;
+  likes?: string[];
 }
 
 /**
@@ -13,43 +14,30 @@ interface LikeButtonProps {
  */
 export const LikeButton = ({
   postId,
+  likes,
 }: LikeButtonProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
-  const [likeCount, setLikeCount] = useState(0);
-  const [likeUsers, setLikeUsers] = useState([""]);
-
-  useEffect(() => {
-    getLikesData();
-  }, [postId])
-
-  const getLikesData = async () => {
-    setIsLoading(true);
-    await getLikes(postId).then(data => {
-      setLikeCount(data.likeCount);
-      setLikeUsers(data.post.likes);
-    });
-    setIsLoading(false);
-  }
+  const [likeCount, setLikeCount] = useState(likes ? likes.length : 0);
+  const [isMyLike, setIsMyLike] = useState(likes.indexOf(userInfo._id) > -1);
 
   const toggle = async () => {
     setIsLoading(true);
-    const changeToLike = likeUsers.indexOf(userInfo._id) < 0;
+    const changeToLike = !isMyLike;
     await toggleLike({ postId, changeToLike }).then(data => {
       setLikeCount(data.likeCount);
-      setLikeUsers(data.post.likes);
+      setIsMyLike(data.post.likes.indexOf(userInfo._id) > -1);
     })
     setIsLoading(false);
   }
 
   return (
-    postId ?
-      <div
-        className={`flex items-center mb-5${likeUsers.indexOf(userInfo._id) < 0 ? " text-light" : ""}`}
-        onClick={toggle}
-      >
-        <LikeOutlined className="text-xl flex items-center mr-2" />
-        <span>{likeCount ? likeCount.toString() : "成為第一個按讚的朋友"}</span>
-      </div> : null
+    <div
+      className={`flex items-center mb-5${!isMyLike ? " text-light" : ""}`}
+      onClick={toggle}
+    >
+      <LikeOutlined className="text-xl flex items-center mr-2" />
+      <span>{likeCount ? likeCount.toString() : "成為第一個按讚的朋友"}</span>
+    </div>
   )
 }
