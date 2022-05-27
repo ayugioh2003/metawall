@@ -6,7 +6,7 @@ import { loadingState, userState } from "../../../store/states";
 
 interface LikeButtonProps {
   postId: string;
-  likes?: string[];
+  likes: string[];
 }
 
 /**

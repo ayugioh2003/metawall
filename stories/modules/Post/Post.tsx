@@ -47,7 +47,7 @@ export const Post = ({
           <Image src={src ?? "/"} layout="fill" />
         </div>
       )}
-      {likes && <LikeButton postId={_id as string} likes={likes} />}
+      {_id && likes && <LikeButton postId={_id as string} likes={likes as string[]} />}
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
           <Image width="40px" height="40px" src={userInfo.avatar ?? "/"} />
