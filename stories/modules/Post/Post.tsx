@@ -17,7 +17,7 @@ import userDefault from "../../../public/image/user_default.png";
 export const Post = ({
   user,
   content,
-  src,
+  image,
   createdAt,
   className,
   likes,
@@ -43,9 +43,9 @@ export const Post = ({
         className="mb-4"
       />
       <p className="mb-4">{content}</p>
-      {src && (
+      {image && (
         <div className="relative h-[157px] mb-5">
-          <Image src={src ?? "/"} layout="fill" />
+          <Image src={image ?? "/"} layout="fill" objectFit="cover" />
         </div>
       )}
       {_id && likes && <LikeButton postId={_id ?? ""} likes={likes ?? []} />}

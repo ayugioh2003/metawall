@@ -18,7 +18,7 @@ export interface PostProps {
     avatar: string | StaticImageData;
   };
   content: string;
-  src?: StaticImageData;
+  image?: string;
   createdAt?: string;
   className?: string;
   likes?: string[];
@@ -51,7 +51,7 @@ export const PostPage: NextPage = () => {
                   _id={data?._id}
                   user={data?.user}
                   content={data?.content}
-                  src={data?.src}
+                  image={data?.image}
                   createdAt={data?.createdAt}
                   likes={data?.likes}
                   comments={data?.comments}
