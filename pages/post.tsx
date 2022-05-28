@@ -18,7 +18,7 @@ export interface PostProps {
     avatar: string | StaticImageData;
   };
   content: string;
-  image?: string;
+  image?: string | StaticImageData;
   createdAt?: string;
   className?: string;
   likes?: string[];

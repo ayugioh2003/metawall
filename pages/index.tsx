@@ -45,10 +45,6 @@ const Home: NextPage = () => {
     router.push("/post");
   };
 
-  useEffect(() => {
-    router.prefetch("/post");
-  }, [router]);
-
   return (
     <div>
       <Head>

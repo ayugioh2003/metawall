@@ -28,6 +28,6 @@ Primary.args = {
     avatar,
   },
   content: "外面看起來就超冷.... 我決定回被窩繼續睡....>.<",
-  src: bg,
+  image: bg,
   createdAt: dayjs().format("YYYY/MM/DD HH:mm"),
 };

@@ -31,7 +31,7 @@ export const UserWallPage: NextPage = () => {
                 key={data._id}
                 user={data.user}
                 content={data.content}
-                src={data.src}
+                image={data.image}
                 createdAt={data.createdAt}
                 likes={data.likes}
                 comments={data.comments}
