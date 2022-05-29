@@ -1,5 +1,6 @@
 import axios from "../utils/axiosConfig";
 import Swal from "sweetalert2";
+import { ToggleLikeParam } from "../pages/post";
 
 const path = "/api/likes";
 let token: string | null = "";
@@ -22,12 +23,11 @@ export async function getLikes(postId: string) {
     });
 }
 
-export async function toggleLike(data: any) {
-  const type = data.changeToLike ? "add" : "remove";
+export async function toggleLike({ postId, changeToLike }: ToggleLikeParam) {
 
   return await axios
     .patch(
-      `${path}?post_id=${data.postId}&toggle_type=${type}`,
+      `${path}?post_id=${postId}&toggle_type=${changeToLike ? "add" : "remove"}`,
       null,
       {
         headers: {

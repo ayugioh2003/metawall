@@ -7,8 +7,9 @@ import user5 from "../public/image/user5.png";
 import { Toolbar } from "../stories/modules/toolbar/Toolbar";
 import { SearchBar } from "../stories/modules/searchBar/SearchBar";
 import { useRecoilState } from "recoil";
-import { postState } from "../store/states";
+import { postState, loadingState } from "../store/states";
 import { getPosts } from "../api/posts";
+import { toggleLike } from "../api/likes";
 import { StaticImageData } from "next/image";
 
 export interface PostProps {
@@ -23,6 +24,12 @@ export interface PostProps {
   className?: string;
   likes?: string[];
   comments?: any[];
+  togglePostLike: (arg0: ToggleLikeParam) => void;
+}
+
+export interface ToggleLikeParam {
+  postId: string,
+  changeToLike: boolean
 }
 
 export const PostPage: NextPage = () => {
@@ -30,12 +37,24 @@ export const PostPage: NextPage = () => {
     { name: "杰哥後援會", icon: user5 },
   ]);
   const [postData, setPostData] = useRecoilState(postState);
+  const [isLoading, setIsLoading] = useRecoilState(loadingState);
 
-  useEffect(() => {
+  const getData = () => {
     getPosts().then(data => {
       setPostData(data);
     });
-  }, [setPostData]);
+  }
+
+  const togglePostLike = async ({ postId, changeToLike }: ToggleLikeParam) => {
+    setIsLoading(true);
+    await toggleLike({ postId, changeToLike })
+      .then(data => getData())
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
@@ -56,6 +75,7 @@ export const PostPage: NextPage = () => {
                   likes={data?.likes}
                   comments={data?.comments}
                   className="mb-4"
+                  togglePostLike={togglePostLike}
                 />
               ))}
           </div>

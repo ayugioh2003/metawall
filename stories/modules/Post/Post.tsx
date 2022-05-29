@@ -23,6 +23,7 @@ export const Post = ({
   likes,
   comments,
   _id,
+  togglePostLike,
 }: PostProps) => {
   const [userInfo, _setUserInfo] = useRecoilState(userState);
   const { register, handleSubmit, setValue } = useForm();
@@ -48,7 +49,12 @@ export const Post = ({
           <Image src={image ?? "/"} layout="fill" objectFit="cover" />
         </div>
       )}
-      {_id && likes && <LikeButton postId={_id ?? ""} likes={likes ?? []} />}
+      {_id && likes && <LikeButton
+        postId={_id ?? ""}
+        likes={likes ?? []}
+        togglePostLike={togglePostLike}
+        isMyLike = {likes.indexOf(userInfo._id) > -1}
+      />}
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
           <Image
