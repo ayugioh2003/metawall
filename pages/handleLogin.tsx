@@ -39,13 +39,17 @@ export const HandleLogin = (props: any) => {
     checkLogin();
   }, []);
 
+  useEffect(() => {
+    document.documentElement.style.overflowY = isLoading ? 'hidden' : 'scroll';
+  }, [isLoading]);
+
   return (
     <>
       {isLoading && (
         <div
           className="flex justify-center items-center w-full h-full"
           style={{
-            position: "absolute",
+            position: "fixed",
             zIndex: 99,
             backgroundColor: "rgba(0,0,0,0.5)",
           }}
