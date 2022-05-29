@@ -20,7 +20,7 @@ export const loadingState = atom({
 export const userState = atom({
   key: "userState",
   default: {
-    id: "628b4816313de1e5a54387f9",
+    _id: "628b4816313de1e5a54387f9",
     name: "Jay",
     email: "jay@gmail.com",
     password: "1234qwer",

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { User } from "../user/User";
+import { LikeButton } from "../likeButton/LikeButton";
 import { LikeOutlined } from "@ant-design/icons";
 import { Input } from "../input/Input";
 import loadingGif from "../../../public/image/loading.gif";
@@ -8,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { userState } from "../../../store/states";
 import { PostProps } from "../../../pages/post";
+import userDefault from "../../../public/image/user_default.png";
 
 /**
  * Primary UI component for user interaction
@@ -15,11 +17,13 @@ import { PostProps } from "../../../pages/post";
 export const Post = ({
   user,
   content,
-  src,
+  image,
   createdAt,
   className,
-  like,
+  likes,
   comments,
+  _id,
+  togglePostLike,
 }: PostProps) => {
   const [userInfo, _setUserInfo] = useRecoilState(userState);
   const { register, handleSubmit, setValue } = useForm();
@@ -40,24 +44,28 @@ export const Post = ({
         className="mb-4"
       />
       <p className="mb-4">{content}</p>
-      {src && (
+      {image && (
         <div className="relative h-[157px] mb-5">
-          <Image src={src ?? "/"} layout="fill" />
+          <Image src={image ?? "/"} layout="fill" objectFit="cover" />
         </div>
       )}
-      {like ? (
-        <div className="flex items-center mb-5">
-          <LikeOutlined className="text-xl flex items-center mr-2" /> {like}
-        </div>
-      ) : (
-        <div className="flex items-center mb-5  text-light">
-          <LikeOutlined className="text-xl flex items-center mr-2" />
-          成為第一個按讚的朋友
-        </div>
-      )}
+      {_id && likes && <LikeButton
+        postId={_id ?? ""}
+        likes={likes ?? []}
+        togglePostLike={togglePostLike}
+        isMyLike = {likes.indexOf(userInfo._id) > -1}
+      />}
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
-          <Image width="40px" height="40px" src={userInfo.avatar ?? "/"} />
+          <Image
+            width="40px"
+            height="40px"
+            src={
+              userInfo.avatar && userInfo.avatar !== " "
+                ? userInfo.avatar
+                : userDefault
+            }
+          />
         </div>
         <Input
           size="small"

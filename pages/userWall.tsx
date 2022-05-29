@@ -9,10 +9,16 @@ import { SearchBar } from "../stories/modules/searchBar/SearchBar";
 import { useRecoilState } from "recoil";
 import { postState } from "../store/states";
 import { PostProps } from "./post";
+import { ToggleLikeParam } from "./post";
 
 export const UserWallPage: NextPage = () => {
   const [options, setOptions] = useState([]);
   const [postData, setPostData] = useRecoilState(postState);
+
+  const togglePostLike = async ({ postId, changeToLike }: ToggleLikeParam) => {
+    console.log(postId, changeToLike);
+  }
+
   return (
     <>
       <Header />
@@ -31,11 +37,12 @@ export const UserWallPage: NextPage = () => {
                 key={data._id}
                 user={data.user}
                 content={data.content}
-                src={data.src}
+                image={data.image}
                 createdAt={data.createdAt}
-                like={data.like}
+                likes={data.likes}
                 comments={data.comments}
                 className="mb-4"
+                togglePostLike={togglePostLike}
               />
             ))}
           </div>

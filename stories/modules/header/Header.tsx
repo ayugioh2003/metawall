@@ -16,6 +16,12 @@ export const Header = ({ className }: HeaderProps) => {
   const router = useRouter();
   const [dropDown, setDropdown] = useState(false);
   const [userInfo, _setUserInfo] = useRecoilState(userState);
+
+  const logout = () => {
+    typeof window !== undefined && localStorage.setItem("token", "");
+    router.push("/");
+  };
+
   return (
     <header
       className={`w-full bg-white border-b-[3px] border-b-solid border-b-header-border flex justify-center ${className}`}
@@ -56,7 +62,7 @@ export const Header = ({ className }: HeaderProps) => {
             </p>
             <p
               className="py-2 text-center hover:bg-c-bg cursor-pointer"
-              onClick={() => router.push("/")}
+              onClick={() => logout()}
             >
               登出
             </p>

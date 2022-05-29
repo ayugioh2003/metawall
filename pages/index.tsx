@@ -8,7 +8,7 @@ import { Input } from "../stories/modules/input/Input";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { loginState, userState } from "../store/states";
+import { loadingState, loginState, userState } from "../store/states";
 import { useEffect } from "react";
 import { fetchLogin } from "../api/auth";
 import Swal from "sweetalert2";
@@ -17,12 +17,14 @@ const Home: NextPage = () => {
   const router = useRouter();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [handlelLogin, setHandlelLogin] = useRecoilState(loginState);
+  const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = async (data: any) => {
+    setIsLoading(true);
     const res = await fetchLogin(data);
     if (!res.data) {
       Swal.fire({
@@ -31,6 +33,7 @@ const Home: NextPage = () => {
         icon: "error",
         confirmButtonText: "我知道了",
       });
+      setIsLoading(false);
       return;
     }
     setUserInfo(res.data.data.user);
@@ -38,12 +41,9 @@ const Home: NextPage = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("token", res.data.data.token);
     }
+    setIsLoading(false);
     router.push("/post");
   };
-
-  useEffect(() => {
-    router.prefetch("/post");
-  }, [router]);
 
   return (
     <div>
