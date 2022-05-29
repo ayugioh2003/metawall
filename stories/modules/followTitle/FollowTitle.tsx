@@ -24,7 +24,7 @@ export const FollowTitle = ({
       <div className="absolute top-0 left-0 w-full flex justify-between items-center text-xl text-dark font-bold h-20 border-2 border-solid border-dark z-10 bg-white pr-4">
         <div className="flex">
           <div className="flex justify-center items-center min-w-[80px] h-20 border-r-2 border-r-dark border-r-solid relative overflow-hidden mr-4">
-            <Image width="76px" height="76px" src={src} />
+            <Image width="76px" height="76px" src={src} alt="follow" />
           </div>
           <div className="flex flex-col justify-center">
             <p>{followName}</p>

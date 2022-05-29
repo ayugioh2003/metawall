@@ -61,16 +61,10 @@ const Register: NextPage = () => {
   };
   return (
     <div>
-      <Head>
-        <title>MetaWall</title>
-        <meta name="description" content="MetaWall" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main className="flex justify-center items-center h-full min-h-screen bg-c-bg">
         <div className="flex max-w-[869px] max-h-[635px] min-w-[600px] border-2 border-solid border-dark py-[60px] px-12 bg-c-bg shadow-main">
           <div className="w-1/2 pr-6">
-            <Image src={login} objectFit="cover"></Image>
+            <Image src={login} objectFit="cover" alt="registerLogo"></Image>
           </div>
           <div className="w-1/2 flex flex-col items-center pl-6">
             <h1 className="text-6xl text-primary font-paytone font-black leading-1.4">
