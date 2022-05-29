@@ -105,6 +105,7 @@ export const CreatePostPage: NextPage = () => {
                       src={image.imagePreview}
                       layout="fill"
                       objectFit="cover"
+                      alt="preview"
                     />
                   </div>
                 )}

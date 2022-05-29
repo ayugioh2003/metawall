@@ -46,15 +46,22 @@ export const Post = ({
       <p className="mb-4">{content}</p>
       {image && (
         <div className="relative h-[157px] mb-5">
-          <Image src={image ?? "/"} layout="fill" objectFit="cover" />
+          <Image
+            src={image ?? "/"}
+            layout="fill"
+            objectFit="cover"
+            alt="postImage"
+          />
         </div>
       )}
-      {_id && likes && <LikeButton
-        postId={_id ?? ""}
-        likes={likes ?? []}
-        togglePostLike={togglePostLike}
-        isMyLike = {likes.indexOf(userInfo._id) > -1}
-      />}
+      {_id && likes && (
+        <LikeButton
+          postId={_id ?? ""}
+          likes={likes ?? []}
+          togglePostLike={togglePostLike}
+          isMyLike={likes.indexOf(userInfo._id) > -1}
+        />
+      )}
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
           <Image
@@ -92,7 +99,12 @@ export const Post = ({
             留言
             {loading && (
               <span className="absolute top-2 right-5">
-                <Image width="12px" height="12px" src={loadingGif} />
+                <Image
+                  width="12px"
+                  height="12px"
+                  src={loadingGif}
+                  alt="loading"
+                />
               </span>
             )}
           </button>
