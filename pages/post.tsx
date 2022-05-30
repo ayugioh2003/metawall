@@ -55,7 +55,7 @@ export const PostPage: NextPage = () => {
   }, []);
 
   const wsCallback = useCallback(() => {
-    let ws = new WebSocket("wss://ws-empty.herokuapp.com/jeffchao");
+    let ws = new WebSocket("wss:metawall-websocket.herokuapp.com/?");
     ws.onopen = () => {
       console.log("open connection");
     };
