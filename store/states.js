@@ -7,9 +7,12 @@ import dayjs from "dayjs";
 
 export const loginState = atom({
   key: "loginState",
-  default: {
-    isLogin: false,
-  },
+  default: false,
+});
+
+export const connectState = atom({
+  key: "connectState",
+  default: false,
 });
 
 export const loadingState = atom({

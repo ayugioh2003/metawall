@@ -6,8 +6,8 @@ import { fetchCurrentUser } from "../api/user";
 import { loginState, userState, loadingState } from "../store/states";
 
 export const HandleLogin = (props: any) => {
-  const [handleLogin, setHandleLogin] = useRecoilState(loginState);
-  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const [_userInfo, setUserInfo] = useRecoilState(userState);
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
   const router = useRouter();
   const pushPostRouter = ["/", "/register"];
@@ -20,7 +20,7 @@ export const HandleLogin = (props: any) => {
         const loginStatus: any = await check(token);
         const isSuccess = loginStatus?.data?.status === "success";
         if (isSuccess) {
-          setHandleLogin({ isLogin: true });
+          setIsLogin(true);
           pushPostRouter.includes(router.pathname) && router.push("/post");
           await fetchCurrentUser().then(res => {
             setUserInfo(res.data.data);
@@ -33,14 +33,14 @@ export const HandleLogin = (props: any) => {
     setIsLoading(false);
   };
   const isRenderComponent =
-    !!handleLogin.isLogin || pushPostRouter.includes(router.pathname);
+    !!isLogin || pushPostRouter.includes(router.pathname);
 
   useEffect(() => {
     checkLogin();
   }, []);
 
   useEffect(() => {
-    document.documentElement.style.overflowY = isLoading ? 'hidden' : 'scroll';
+    document.documentElement.style.overflowY = isLoading ? "hidden" : "scroll";
   }, [isLoading]);
 
   return (

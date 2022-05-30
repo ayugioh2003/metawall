@@ -35,8 +35,7 @@ export interface ToggleLikeParam {
 export const PostPage: NextPage = () => {
   const [options, _setOptions] = useState([]);
   const [postData, setPostData] = useRecoilState(postState);
-  const [isLoading, setIsLoading] = useRecoilState(loadingState);
-  const [wsState, setWsState] = useState<WebSocket | null>(null);
+  const [_isLoading, setIsLoading] = useRecoilState(loadingState);
 
   const getData = () => {
     getPosts().then(data => {
@@ -52,24 +51,6 @@ export const PostPage: NextPage = () => {
 
   useEffect(() => {
     getData();
-  }, []);
-
-  const wsCallback = useCallback(() => {
-    let ws = new WebSocket("wss:metawall-websocket.herokuapp.com/?");
-    ws.onopen = () => {
-      console.log("open connection");
-    };
-    ws.onclose = () => {
-      console.log("close connection");
-    };
-    ws.onmessage = data => {
-      console.log("data : ", data.data);
-    };
-    return ws;
-  }, []);
-
-  useEffect(() => {
-    setWsState(wsCallback());
   }, []);
 
   return (
@@ -96,15 +77,6 @@ export const PostPage: NextPage = () => {
               ))}
           </div>
           <div className="hidden md:block md:w-1/4">
-            <button
-              onClick={() => {
-                if (wsState) {
-                  wsState.send(JSON.stringify("aaaaaaaaaa"));
-                }
-              }}
-            >
-              enterMessage
-            </button>
             <OptionList options={options} />
           </div>
           <Toolbar className="md:hidden fixed bottom-10 left-2/4 transform -translate-x-1/2" />

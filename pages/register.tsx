@@ -16,7 +16,7 @@ const Register: NextPage = () => {
   const router = useRouter();
   const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const [_userInfo, setUserInfo] = useRecoilState(userState);
-  const [_handlelLogin, setHandlelLogin] = useRecoilState(loginState);
+  const [_isLogin, setIsLogin] = useRecoilState(loginState);
   const {
     register,
     handleSubmit,
@@ -51,7 +51,7 @@ const Register: NextPage = () => {
         return;
       }
       setUserInfo(loginRes.data.data.user);
-      setHandlelLogin({ isLogin: true });
+      setIsLogin(true);
       if (typeof window !== "undefined") {
         localStorage.setItem("token", loginRes.data.data.token);
       }
