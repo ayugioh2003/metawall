@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Header } from "../stories/modules/header/Header";
 import { OptionList } from "../stories/modules/optionList/OptionList";
 import { Post } from "../stories/modules/Post/Post";
@@ -28,30 +28,48 @@ export interface PostProps {
 }
 
 export interface ToggleLikeParam {
-  postId: string,
-  changeToLike: boolean
+  postId: string;
+  changeToLike: boolean;
 }
 
 export const PostPage: NextPage = () => {
   const [options, _setOptions] = useState([]);
   const [postData, setPostData] = useRecoilState(postState);
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
+  const [wsState, setWsState] = useState<WebSocket | null>(null);
 
   const getData = () => {
     getPosts().then(data => {
       setPostData(data);
     });
-  }
+  };
 
   const togglePostLike = async ({ postId, changeToLike }: ToggleLikeParam) => {
     setIsLoading(true);
-    await toggleLike({ postId, changeToLike })
-      .then(data => getData())
+    await toggleLike({ postId, changeToLike }).then(data => getData());
     setIsLoading(false);
-  }
+  };
 
   useEffect(() => {
     getData();
+  }, []);
+
+  const wsCallback = useCallback(() => {
+    let ws = new WebSocket("wss://ws-empty.herokuapp.com/jeffchao");
+    ws.onopen = () => {
+      console.log("open connection");
+    };
+    ws.onclose = () => {
+      console.log("close connection");
+    };
+    ws.onmessage = data => {
+      console.log("data : ", data.data);
+    };
+    return ws;
+  }, []);
+
+  useEffect(() => {
+    setWsState(wsCallback());
   }, []);
 
   return (
@@ -78,6 +96,15 @@ export const PostPage: NextPage = () => {
               ))}
           </div>
           <div className="hidden md:block md:w-1/4">
+            <button
+              onClick={() => {
+                if (wsState) {
+                  wsState.send(JSON.stringify("aaaaaaaaaa"));
+                }
+              }}
+            >
+              enterMessage
+            </button>
             <OptionList options={options} />
           </div>
           <Toolbar className="md:hidden fixed bottom-10 left-2/4 transform -translate-x-1/2" />
