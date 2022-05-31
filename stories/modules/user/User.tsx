@@ -54,7 +54,7 @@ export const User = ({
         </p>
       )}
       {follow && <p className="text-xs text-light">您已追蹤{follow}天</p>}
-      {post && <p className="text-xs text-light">發文時間：{post}</p>}
+      {post && <p className="text-xs text-light">發文時間：{dayjs(post).format("YYYY/MM/DD HH:mm")}</p>}
     </div>
   </div>
 );
