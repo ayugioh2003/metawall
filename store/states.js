@@ -77,38 +77,7 @@ export const followListState = atom({
 
 export const likePostState = atom({
   key: "likePostState",
-  default: [
-    {
-      userName: "波吉",
-      userIcon: user1,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-    {
-      userName: "多魯米",
-      userIcon: user51,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-    {
-      userName: "卡克",
-      userIcon: user4,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-    {
-      userName: "希琳",
-      userIcon: user5,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-    {
-      userName: "多瑪斯",
-      userIcon: user1,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      postFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-  ],
+  default: [],
 });
 
 export const searchState = atom({

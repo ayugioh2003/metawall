@@ -12,7 +12,7 @@ interface UserProps {
   bottomLine?: boolean;
   className?: string;
   follow?: string;
-  post?: string;
+  postCreateAt?: string;
 }
 
 /**
@@ -27,7 +27,7 @@ export const User = ({
   date,
   className,
   follow,
-  post,
+  postCreateAt,
 }: UserProps) => (
   <div className={`flex mr-2.5 ${className}`}>
     <div className="flex justify-center items-center mr-4">
@@ -54,7 +54,7 @@ export const User = ({
         </p>
       )}
       {follow && <p className="text-xs text-light">您已追蹤{follow}天</p>}
-      {post && <p className="text-xs text-light">發文時間：{post}</p>}
+      {postCreateAt && <p className="text-xs text-light">發文時間：{dayjs(postCreateAt).format("YYYY/MM/DD HH:mm")}</p>}
     </div>
   </div>
 );

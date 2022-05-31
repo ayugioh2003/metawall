@@ -39,3 +39,18 @@ export async function addPost(data: any) {
       });
     });
 }
+
+export async function getUserLikes() {
+  return await axios
+    .get(
+      `${path}/likes`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    .then(response => response.data.data)
+    .catch(error => {
+      console.log(error);
+    });
+}
