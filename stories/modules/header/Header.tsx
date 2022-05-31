@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { User } from "../user/User";
 import userDefault from "../../../public/image/user_default.png";
 import { useRecoilState } from "recoil";
-import { userState } from "../../../store/states";
+import { loginState, userState } from "../../../store/states";
 
 interface HeaderProps {
   className?: string;
@@ -16,9 +16,11 @@ export const Header = ({ className }: HeaderProps) => {
   const router = useRouter();
   const [dropDown, setDropdown] = useState(false);
   const [userInfo, _setUserInfo] = useRecoilState(userState);
+  const [_isLogin, setIsLogin] = useRecoilState(loginState);
 
   const logout = () => {
     typeof window !== undefined && localStorage.setItem("token", "");
+    setIsLogin(false);
     router.push("/");
   };
 
