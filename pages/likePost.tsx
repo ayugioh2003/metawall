@@ -53,7 +53,7 @@ export const LikePostPage: NextPage = () => {
               >
                 <User
                   userName={post.user.name}
-                  post={post.createdAt}
+                  postCreateAt={post.createdAt}
                   avatar={post.user.avatar}
                 />
                 <ul className="flex mr-6">
