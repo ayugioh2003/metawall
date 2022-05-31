@@ -6,9 +6,10 @@ import { Title } from "../stories/modules/title/Title";
 import { User } from "../stories/modules/user/User";
 import { LikeOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { getUserLikes } from "../api/posts";
+import { toggleLike } from "../api/likes";
 import { useRecoilState } from "recoil";
 import { likePostState, loadingState } from "../store/states";
-import { PostProps } from "./post";
+import { PostProps, ToggleLikeParam } from "./post";
 
 export const LikePostPage: NextPage = () => {
   const [options, setOptions] = useState([]);
@@ -22,6 +23,17 @@ export const LikePostPage: NextPage = () => {
       .catch(err => console.log(err))
     setIsLoading(false);
   }, [setLikePost, setIsLoading]);
+
+  const togglePostLike = async ({ postId, changeToLike }: ToggleLikeParam) => {
+    setIsLoading(true);
+    await toggleLike({ postId, changeToLike })
+      .then(() => {
+        const arr = likePost.filter((x: any) => x._id !== postId);
+        setLikePost(arr);
+      })
+      .catch(err => console.log(err))
+    setIsLoading(false);
+  }
 
   useEffect(() => {
     getLikePosts();
@@ -45,7 +57,7 @@ export const LikePostPage: NextPage = () => {
                   avatar={post.user.avatar}
                 />
                 <ul className="flex mr-6">
-                  <li className="flex flex-col mr-9">
+                  <li className="flex flex-col mr-9 cursor-pointer" onClick={() => togglePostLike({ postId: post._id ?? "", changeToLike: false })}>
                     <LikeOutlined className="text-xl mb-1" />
                     <p className="text-dark text-sm font-bold">取消</p>
                   </li>
