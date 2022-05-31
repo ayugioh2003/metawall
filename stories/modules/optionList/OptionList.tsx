@@ -53,6 +53,7 @@ export const OptionList = ({ options }: OptionListProps) => {
           icon={
             <LikeOutlined className="text-xl flex justify-center items-center" />
           }
+          onButtonClick={() => router.push("/likePost")}
         />
       </div>
     </div>

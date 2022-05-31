@@ -25,7 +25,7 @@ export const Toolbar = ({ className }: ToolbarProps) => {
       <div className="flex justify-center items-center w-12 h-12 rounded-full border-[3px] border-solid border-dark bg-white mr-6 my-2">
         <BellOutlined className="flex justify-center items-center text-xl" />
       </div>
-      <div className="flex justify-center items-center w-12 h-12 rounded-full border-[3px] border-solid border-dark bg-white mr-6 my-2">
+      <div onClick={() => router.push("/likePost")} className="flex justify-center items-center w-12 h-12 rounded-full border-[3px] border-solid border-dark bg-white mr-6 my-2">
         <LikeOutlined className="flex justify-center items-center text-xl" />
       </div>
       <div onClick={() => router.push("/createPost")} className="flex justify-center items-center w-12 h-12 rounded-full border-[3px] border-solid border-dark bg-primary my-2">
