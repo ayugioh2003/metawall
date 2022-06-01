@@ -35,7 +35,7 @@ export const CreatePostPage: NextPage = () => {
   const onSubmit = async (data: any) => {
     setIsLoading(true);
     let imageUrl = "";
-    if (!!image?.imageFile) {
+    if (image?.imageSize) {
       const imageData = await fetchUploadImage(image.imageFile);
       if (!imageData.data) {
         Swal.fire({

@@ -43,3 +43,21 @@ export async function resetPassword(data: any) {
       });
     });
 }
+
+export async function resetUserinfo(data: any) {
+  return await axios
+    .patch(`${path}/current-userinfo`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .catch(error => {
+      console.log(error);
+      Swal.fire({
+        title: "Error!",
+        text: "修改個人資料失敗，請稍後再試",
+        icon: "error",
+        confirmButtonText: "我知道了",
+      });
+    });
+}

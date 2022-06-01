@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 import userDefault from "../../../public/image/user_default.png";
 import { Input } from "../input/Input";
 import { Button } from "../button/Button";
@@ -8,7 +10,8 @@ import { uploadImage } from "../../../utils/utils";
 import style from "./tag.module.css";
 import { useRecoilState } from "recoil";
 import { userState, loadingState } from "../../../store/states";
-import { resetPassword } from "../../../api/user";
+import { resetUserinfo, resetPassword, fetchCurrentUser } from "../../../api/user";
+import { fetchUploadImage } from "../../../api/uploadImage";
 
 interface TagProps {}
 
@@ -16,6 +19,7 @@ interface TagProps {}
  * Primary UI component for user interaction
  */
 export const Tag = ({}: TagProps) => {
+  const router = useRouter();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
   const {
@@ -33,10 +37,44 @@ export const Tag = ({}: TagProps) => {
     imageSize: 0,
   });
 
-  const updateUserData = (data: any) => {
-    const { uploadAvatar, userName, gender } = data;
-    console.log({ uploadAvatar, userName, gender });
-    setIsError(!isError);
+  const updateUserData = async (data: any) => {
+    setIsLoading(true);
+    const { userName, gender } = data;
+    let newData = {};
+
+    if (userName)
+      newData = { ...newData, name: userName }
+    if (gender)
+      newData = { ...newData, gender }
+    if (image?.imageSize) {
+      const imageData = await fetchUploadImage(image.imageFile);
+      if (!imageData.data) {
+        Swal.fire({
+          title: "Error!",
+          text: "圖片上傳失敗，請稍後再試",
+          icon: "error",
+          confirmButtonText: "我知道了",
+        });
+        setIsLoading(false);
+        return;
+      }
+      newData = { ...newData, avatar: imageData.data.data.url }
+    }
+
+    await resetUserinfo(newData)
+      .then(async () => {
+        await fetchCurrentUser().then(res => {
+          // console.log(res.data.data)
+          setUserInfo(res.data.data);
+          Swal.fire({
+            title: "Success!",
+            text: "修改個人資料成功",
+            icon: "success",
+            confirmButtonText: "我知道了",
+          })
+        });
+      })
+    setIsLoading(false);
   };
 
   const updatePassword = async (data: any) => {
@@ -92,7 +130,7 @@ export const Tag = ({}: TagProps) => {
                 className={style.avatar}
                 width="107px"
                 height="107px"
-                src={image.imagePreview || userDefault}
+                src={image.imagePreview || userInfo.avatar || userDefault}
                 alt="avatar"
               />
             </div>
@@ -115,10 +153,17 @@ export const Tag = ({}: TagProps) => {
               <Input
                 placeholder="UserName"
                 className="mb-4"
-                register={register("userName", { required: true })}
+                register={register("userName", {
+                  required: true,
+                  minLength: {
+                    value: 2,
+                    message: "暱稱不得短於兩個字"
+                  },
+                })}
                 error={{
                   errors: errors.userName,
                   requiredError: "請輸入暱稱",
+                  minLengthError: "暱稱不得短於兩個字",
                 }}
               />
               <p className="text-dark mb-2">性別</p>
@@ -148,7 +193,7 @@ export const Tag = ({}: TagProps) => {
                   女性
                 </label>
               </div>
-              {isError && (
+              {/* {isError && (
                 <div className="mb-4 flex flex-col justify-center items-center">
                   <p className="text-error text-sm">
                     1.圖片寬高比必需為 1:1,請重新輸入
@@ -157,11 +202,11 @@ export const Tag = ({}: TagProps) => {
                     2.解析度寬度至少 300像素以上,請重新輸入
                   </p>
                 </div>
-              )}
+              )} */}
               <Button
                 type="submit"
                 label="送出更新"
-                active={!isError}
+                active={isValid}
                 disable={!isValid}
               />
             </div>
