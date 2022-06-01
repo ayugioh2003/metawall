@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form";
 import { uploadImage } from "../../../utils/utils";
 import style from "./tag.module.css";
 import { useRecoilState } from "recoil";
-import { userState } from "../../../store/states";
+import { userState, loadingState } from "../../../store/states";
+import { resetPassword } from "../../../api/user";
 
 interface TagProps {}
 
@@ -16,6 +17,7 @@ interface TagProps {}
  */
 export const Tag = ({}: TagProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [isLoading, setIsLoading] = useRecoilState(loadingState);
   const {
     register,
     handleSubmit,
@@ -30,15 +32,22 @@ export const Tag = ({}: TagProps) => {
     imagePreview: "",
     imageSize: 0,
   });
+
   const updateUserData = (data: any) => {
     const { uploadAvatar, userName, gender } = data;
     console.log({ uploadAvatar, userName, gender });
     setIsError(!isError);
   };
-  const updatePassword = (data: any) => {
-    const { password } = data;
-    console.log(password);
+
+  const updatePassword = async (data: any) => {
+    setIsLoading(true);
+    const { password, confirmPassword } = data;
+    await resetPassword({ password, confirmPassword });
+    setValue("password", "");
+    setValue("confirmPassword", "");
+    setIsLoading(false);
   };
+
   useEffect(() => {
     setValue("gender", userInfo.gender);
     setValue("userName", userInfo.name);
@@ -119,10 +128,9 @@ export const Tag = ({}: TagProps) => {
                   type="radio"
                   value="male"
                   id="male"
-                  className={`${
-                    watch("gender") === "male" &&
+                  className={`${watch("gender") === "male" &&
                     "after:w-2.5 after:h-2.5 after:bg-dark after:absolute after:top-[3px] after:left-[3.5px] after:rounded-full"
-                  } relative w-5 h-5 border-2 border-solid border-dark rounded-full mr-3 appearance-none`}
+                    } relative w-5 h-5 border-2 border-solid border-dark rounded-full mr-3 appearance-none`}
                 />
                 <label htmlFor="male" className="mr-6">
                   男性
@@ -132,10 +140,9 @@ export const Tag = ({}: TagProps) => {
                   type="radio"
                   value="female"
                   id="female"
-                  className={`${
-                    watch("gender") === "female" &&
+                  className={`${watch("gender") === "female" &&
                     "after:w-2.5 after:h-2.5 after:bg-dark after:absolute after:top-[3px] after:left-[3.5px] after:rounded-full"
-                  } relative w-5 h-5 border-2 border-solid border-dark rounded-full mr-3 appearance-none`}
+                    } relative w-5 h-5 border-2 border-solid border-dark rounded-full mr-3 appearance-none`}
                 />
                 <label htmlFor="female" className="mr-6">
                   女性
@@ -164,6 +171,7 @@ export const Tag = ({}: TagProps) => {
             <div className="w-3/5">
               <p className="text-dark">輸入新密碼</p>
               <Input
+                type="password"
                 placeholder="請輸入新密碼"
                 className="mt-1"
                 register={register("password", {
@@ -178,19 +186,20 @@ export const Tag = ({}: TagProps) => {
               />
               <p className="text-dark mt-4">再次輸入</p>
               <Input
+                type="password"
                 placeholder="再次輸入新密碼"
                 className="mt-1"
-                register={register("repeatPassword", {
+                register={register("confirmPassword", {
                   required: true,
                   minLength: 6,
                 })}
                 error={{
-                  errors: errors.repeatPassword,
+                  errors: errors.confirmPassword,
                   requiredError: "請重新輸入密碼",
                   minLengthError: "密碼長度應大於6個字元",
                 }}
               />
-              {watch("password") !== watch("repeatPassword") && (
+              {watch("password") !== watch("confirmPassword") && (
                 <p className="w-full text-sm text-error mt-1">密碼不一致</p>
               )}
               <Button
@@ -198,7 +207,7 @@ export const Tag = ({}: TagProps) => {
                 type="submit"
                 label="重設密碼"
                 disable={
-                  !isValid || watch("password") !== watch("repeatPassword")
+                  !isValid || watch("password") !== watch("confirmPassword")
                 }
               />
             </div>
