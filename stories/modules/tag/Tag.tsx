@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
@@ -10,7 +10,11 @@ import { uploadImage } from "../../../utils/utils";
 import style from "./tag.module.css";
 import { useRecoilState } from "recoil";
 import { userState, loadingState } from "../../../store/states";
-import { resetUserinfo, resetPassword, fetchCurrentUser } from "../../../api/user";
+import {
+  resetUserinfo,
+  resetPassword,
+  fetchCurrentUser,
+} from "../../../api/user";
 import { fetchUploadImage } from "../../../api/uploadImage";
 
 interface TagProps {}
@@ -19,9 +23,8 @@ interface TagProps {}
  * Primary UI component for user interaction
  */
 export const Tag = ({}: TagProps) => {
-  const router = useRouter();
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [isLoading, setIsLoading] = useRecoilState(loadingState);
+  const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const {
     register,
     handleSubmit,
@@ -30,7 +33,7 @@ export const Tag = ({}: TagProps) => {
     formState: { errors, isValid },
   } = useForm({ mode: "onChange" });
   const [mode, setMode] = useState("updateName");
-  const [isError, setIsError] = useState(false);
+  const [_isError, setIsError] = useState(false);
   const [image, setImage] = useState({
     imageFile: {},
     imagePreview: "",
@@ -42,10 +45,8 @@ export const Tag = ({}: TagProps) => {
     const { userName, gender } = data;
     let newData = {};
 
-    if (userName)
-      newData = { ...newData, name: userName }
-    if (gender)
-      newData = { ...newData, gender }
+    if (userName) newData = { ...newData, name: userName };
+    if (gender) newData = { ...newData, gender };
     if (image?.imageSize) {
       const imageData = await fetchUploadImage(image.imageFile);
       if (!imageData.data) {
@@ -58,22 +59,20 @@ export const Tag = ({}: TagProps) => {
         setIsLoading(false);
         return;
       }
-      newData = { ...newData, avatar: imageData.data.data.url }
+      newData = { ...newData, avatar: imageData.data.data.url };
     }
 
-    await resetUserinfo(newData)
-      .then(async () => {
-        await fetchCurrentUser().then(res => {
-          // console.log(res.data.data)
-          setUserInfo(res.data.data);
-          Swal.fire({
-            title: "Success!",
-            text: "修改個人資料成功",
-            icon: "success",
-            confirmButtonText: "我知道了",
-          })
+    await resetUserinfo(newData).then(async () => {
+      await fetchCurrentUser().then(res => {
+        setUserInfo(res.data.data);
+        Swal.fire({
+          title: "Success!",
+          text: "修改個人資料成功",
+          icon: "success",
+          confirmButtonText: "我知道了",
         });
-      })
+      });
+    });
     setIsLoading(false);
   };
 
@@ -90,6 +89,15 @@ export const Tag = ({}: TagProps) => {
     setValue("gender", userInfo.gender);
     setValue("userName", userInfo.name);
   }, [setValue, userInfo]);
+
+  const src = useMemo(() => {
+    if (image.imagePreview) {
+      return image.imagePreview;
+    } else if (userInfo.avatar && userInfo.avatar !== " ") {
+      return userInfo.avatar;
+    }
+    return userDefault;
+  }, [image.imagePreview, userInfo.avatar]);
 
   return (
     <div className={`flex flex-col min-w-[500px]`}>
@@ -130,8 +138,9 @@ export const Tag = ({}: TagProps) => {
                 className={style.avatar}
                 width="107px"
                 height="107px"
-                src={image.imagePreview || userInfo.avatar || userDefault}
+                src={src}
                 alt="avatar"
+                objectFit="cover"
               />
             </div>
             <label
@@ -157,7 +166,7 @@ export const Tag = ({}: TagProps) => {
                   required: true,
                   minLength: {
                     value: 2,
-                    message: "暱稱不得短於兩個字"
+                    message: "暱稱不得短於兩個字",
                   },
                 })}
                 error={{
@@ -173,9 +182,10 @@ export const Tag = ({}: TagProps) => {
                   type="radio"
                   value="male"
                   id="male"
-                  className={`${watch("gender") === "male" &&
+                  className={`${
+                    watch("gender") === "male" &&
                     "after:w-2.5 after:h-2.5 after:bg-dark after:absolute after:top-[3px] after:left-[3.5px] after:rounded-full"
-                    } relative w-5 h-5 border-2 border-solid border-dark rounded-full mr-3 appearance-none`}
+                  } relative w-5 h-5 border-2 border-solid border-dark rounded-full mr-3 appearance-none`}
                 />
                 <label htmlFor="male" className="mr-6">
                   男性
@@ -185,9 +195,10 @@ export const Tag = ({}: TagProps) => {
                   type="radio"
                   value="female"
                   id="female"
-                  className={`${watch("gender") === "female" &&
+                  className={`${
+                    watch("gender") === "female" &&
                     "after:w-2.5 after:h-2.5 after:bg-dark after:absolute after:top-[3px] after:left-[3.5px] after:rounded-full"
-                    } relative w-5 h-5 border-2 border-solid border-dark rounded-full mr-3 appearance-none`}
+                  } relative w-5 h-5 border-2 border-solid border-dark rounded-full mr-3 appearance-none`}
                 />
                 <label htmlFor="female" className="mr-6">
                   女性
