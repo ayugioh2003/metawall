@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 import userDefault from "../../../public/image/user_default.png";
 import { Input } from "../input/Input";
 import { Button } from "../button/Button";
@@ -7,7 +9,13 @@ import { useForm } from "react-hook-form";
 import { uploadImage } from "../../../utils/utils";
 import style from "./tag.module.css";
 import { useRecoilState } from "recoil";
-import { userState } from "../../../store/states";
+import { userState, loadingState } from "../../../store/states";
+import {
+  resetUserinfo,
+  resetPassword,
+  fetchCurrentUser,
+} from "../../../api/user";
+import { fetchUploadImage } from "../../../api/uploadImage";
 
 interface TagProps {}
 
@@ -16,6 +24,7 @@ interface TagProps {}
  */
 export const Tag = ({}: TagProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const {
     register,
     handleSubmit,
@@ -30,19 +39,66 @@ export const Tag = ({}: TagProps) => {
     imagePreview: "",
     imageSize: 0,
   });
-  const updateUserData = (data: any) => {
-    const { uploadAvatar, userName, gender } = data;
-    console.log({ uploadAvatar, userName, gender });
-    setIsError(!isError);
+
+  const updateUserData = async (data: any) => {
+    setIsLoading(true);
+    const { userName, gender } = data;
+    let avatar = src;
+    if (image?.imageSize) {
+      const imageData = await fetchUploadImage(image.imageFile);
+      if (!imageData.data) {
+        Swal.fire({
+          title: "Error!",
+          text: "圖片上傳失敗，請稍後再試",
+          icon: "error",
+          confirmButtonText: "我知道了",
+        });
+        setIsLoading(false);
+        return;
+      }
+      avatar = imageData.data.data.url
+    }
+
+    await resetUserinfo({
+      name: userName,
+      gender,
+      avatar,
+    }).then(async () => {
+      await fetchCurrentUser().then(res => {
+        setUserInfo(res.data.data);
+        Swal.fire({
+          title: "Success!",
+          text: "修改個人資料成功",
+          icon: "success",
+          confirmButtonText: "我知道了",
+        });
+      });
+    });
+    setIsLoading(false);
   };
-  const updatePassword = (data: any) => {
-    const { password } = data;
-    console.log(password);
+
+  const updatePassword = async (data: any) => {
+    setIsLoading(true);
+    const { password, confirmPassword } = data;
+    await resetPassword({ password, confirmPassword });
+    setValue("password", "");
+    setValue("confirmPassword", "");
+    setIsLoading(false);
   };
+
   useEffect(() => {
     setValue("gender", userInfo.gender);
     setValue("userName", userInfo.name);
   }, [setValue, userInfo]);
+
+  const src = useMemo(() => {
+    if (image.imagePreview) {
+      return image.imagePreview;
+    } else if (userInfo.avatar && userInfo.avatar !== " ") {
+      return userInfo.avatar;
+    }
+    return userDefault;
+  }, [image.imagePreview, userInfo.avatar]);
 
   return (
     <div className={`flex flex-col min-w-[500px]`}>
@@ -83,8 +139,9 @@ export const Tag = ({}: TagProps) => {
                 className={style.avatar}
                 width="107px"
                 height="107px"
-                src={image.imagePreview || userDefault}
+                src={src}
                 alt="avatar"
+                objectFit="cover"
               />
             </div>
             <label
@@ -98,7 +155,7 @@ export const Tag = ({}: TagProps) => {
                 id="uploadAvatar"
                 className="h-0"
                 {...register("uploadAvatar")}
-                onChange={e => uploadImage(e, setIsError, setImage)}
+                onChange={e => uploadImage(e, setIsError, setImage, true)}
               />
             </label>
             <div className="w-3/5 flex flex-col ">
@@ -106,10 +163,17 @@ export const Tag = ({}: TagProps) => {
               <Input
                 placeholder="UserName"
                 className="mb-4"
-                register={register("userName", { required: true })}
+                register={register("userName", {
+                  required: true,
+                  minLength: {
+                    value: 2,
+                    message: "暱稱不得短於兩個字",
+                  },
+                })}
                 error={{
                   errors: errors.userName,
                   requiredError: "請輸入暱稱",
+                  minLengthError: "暱稱不得短於兩個字",
                 }}
               />
               <p className="text-dark mb-2">性別</p>
@@ -144,18 +208,18 @@ export const Tag = ({}: TagProps) => {
               {isError && (
                 <div className="mb-4 flex flex-col justify-center items-center">
                   <p className="text-error text-sm">
-                    1.圖片寬高比必需為 1:1,請重新輸入
+                    1. 圖片寬高比必需為 1:1，請重新輸入
                   </p>
                   <p className="text-error text-sm">
-                    2.解析度寬度至少 300像素以上,請重新輸入
+                    2. 解析度寬度至少 300 像素以上，請重新輸入
                   </p>
                 </div>
               )}
               <Button
                 type="submit"
                 label="送出更新"
-                active={!isError}
-                disable={!isValid}
+                active={isValid && !isError}
+                disable={!isValid || isError}
               />
             </div>
           </>
@@ -164,6 +228,7 @@ export const Tag = ({}: TagProps) => {
             <div className="w-3/5">
               <p className="text-dark">輸入新密碼</p>
               <Input
+                type="password"
                 placeholder="請輸入新密碼"
                 className="mt-1"
                 register={register("password", {
@@ -178,19 +243,20 @@ export const Tag = ({}: TagProps) => {
               />
               <p className="text-dark mt-4">再次輸入</p>
               <Input
+                type="password"
                 placeholder="再次輸入新密碼"
                 className="mt-1"
-                register={register("repeatPassword", {
+                register={register("confirmPassword", {
                   required: true,
                   minLength: 6,
                 })}
                 error={{
-                  errors: errors.repeatPassword,
+                  errors: errors.confirmPassword,
                   requiredError: "請重新輸入密碼",
                   minLengthError: "密碼長度應大於6個字元",
                 }}
               />
-              {watch("password") !== watch("repeatPassword") && (
+              {watch("password") !== watch("confirmPassword") && (
                 <p className="w-full text-sm text-error mt-1">密碼不一致</p>
               )}
               <Button
@@ -198,7 +264,7 @@ export const Tag = ({}: TagProps) => {
                 type="submit"
                 label="重設密碼"
                 disable={
-                  !isValid || watch("password") !== watch("repeatPassword")
+                  !isValid || watch("password") !== watch("confirmPassword")
                 }
               />
             </div>

@@ -33,13 +33,14 @@ export const User = ({
     <div className="flex justify-center items-center mr-4">
       {typeof avatar !== "string" || !avatar || avatar === " " ? (
         <Image
+          className="rounded-full"
           width={width}
-          alt="avatar"
           height={height}
+          alt="avatar"
           src={!!avatar && avatar !== " " ? avatar : userDefault}
         />
       ) : (
-        <img width={width} alt="avatar" height={height} src={avatar} />
+        <img className="rounded-full" width={width} height={height} alt="avatar" src={avatar} />
       )}
     </div>
     <div

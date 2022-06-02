@@ -65,6 +65,7 @@ export const Post = ({
       <form onSubmit={handleSubmit(handleCommand)} className="flex mb-4 w-full">
         <div className=" mr-3">
           <Image
+            className="rounded-full"
             width="40px"
             height="40px"
             src={
