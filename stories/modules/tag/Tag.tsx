@@ -43,10 +43,7 @@ export const Tag = ({}: TagProps) => {
   const updateUserData = async (data: any) => {
     setIsLoading(true);
     const { userName, gender } = data;
-    let newData = {};
-
-    if (userName) newData = { ...newData, name: userName };
-    if (gender) newData = { ...newData, gender };
+    let avatar = src;
     if (image?.imageSize) {
       const imageData = await fetchUploadImage(image.imageFile);
       if (!imageData.data) {
@@ -59,10 +56,14 @@ export const Tag = ({}: TagProps) => {
         setIsLoading(false);
         return;
       }
-      newData = { ...newData, avatar: imageData.data.data.url };
+      avatar = imageData.data.data.url
     }
 
-    await resetUserinfo(newData).then(async () => {
+    await resetUserinfo({
+      name: userName,
+      gender,
+      avatar,
+    }).then(async () => {
       await fetchCurrentUser().then(res => {
         setUserInfo(res.data.data);
         Swal.fire({
