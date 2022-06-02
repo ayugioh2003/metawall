@@ -33,7 +33,7 @@ export const Tag = ({}: TagProps) => {
     formState: { errors, isValid },
   } = useForm({ mode: "onChange" });
   const [mode, setMode] = useState("updateName");
-  const [_isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [image, setImage] = useState({
     imageFile: {},
     imagePreview: "",
@@ -155,7 +155,7 @@ export const Tag = ({}: TagProps) => {
                 id="uploadAvatar"
                 className="h-0"
                 {...register("uploadAvatar")}
-                onChange={e => uploadImage(e, setIsError, setImage)}
+                onChange={e => uploadImage(e, setIsError, setImage, true)}
               />
             </label>
             <div className="w-3/5 flex flex-col ">
@@ -205,21 +205,21 @@ export const Tag = ({}: TagProps) => {
                   女性
                 </label>
               </div>
-              {/* {isError && (
+              {isError && (
                 <div className="mb-4 flex flex-col justify-center items-center">
                   <p className="text-error text-sm">
-                    1.圖片寬高比必需為 1:1,請重新輸入
+                    1. 圖片寬高比必需為 1:1，請重新輸入
                   </p>
                   <p className="text-error text-sm">
-                    2.解析度寬度至少 300像素以上,請重新輸入
+                    2. 解析度寬度至少 300 像素以上，請重新輸入
                   </p>
                 </div>
-              )} */}
+              )}
               <Button
                 type="submit"
                 label="送出更新"
-                active={isValid}
-                disable={!isValid}
+                active={isValid && !isError}
+                disable={!isValid || isError}
               />
             </div>
           </>
