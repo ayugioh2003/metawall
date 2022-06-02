@@ -9,16 +9,16 @@ export function uploadImage(e: ChangeEvent<HTMLInputElement>, setIsError: Functi
             setIsError(false);
 
         if (isAvatar) {
-            var image = new Image();
+            const image = new Image();
             image.onload = function () {
-                var width = image.naturalWidth | image.width;
-                var height = image.naturalHeight | image.height;
+                const width = image.naturalWidth | image.width;
+                const height = image.naturalHeight | image.height;
                 if (width !== height)
                     setIsError(true);
                 if (width < 300 || height < 300)
                     setIsError(true);
             };
-            var objectURL = window.URL.createObjectURL(e.target.files[0]);
+            const objectURL = window.URL.createObjectURL(e.target.files[0]);
             image.src = objectURL;
         }
 
