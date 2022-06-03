@@ -3,9 +3,23 @@ import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { connectState, loginState, userState } from "../store/states";
 import { Input } from "../stories/modules/input/Input";
+import Image from "next/image";
+import userDefault from "../public/image/user_default.png";
+import dayjs from "dayjs";
 
 enum MessageType {
   GLOBAL_MESSAGE = "global-message",
+}
+
+interface Message {
+  type: string;
+  content: string;
+  createdAt?: number;
+  user: {
+    _id: string;
+    name: string;
+    avatar?: string;
+  };
 }
 
 export const Chat = () => {
@@ -21,33 +35,91 @@ export const Chat = () => {
     if (!isLogin || isConnect) {
       return;
     }
-    if (window !== undefined) {
-      const token = localStorage.getItem("token");
-      websocket.current = new WebSocket(
-        `wss:metawall-websocket.herokuapp.com/?userId=${userInfo._id}&token=${token}`
-      );
-      websocket.current.onopen = () => {
-        setIsConnect(true);
-        console.log("open connection");
-      };
-      websocket.current.onclose = () => {
-        setIsConnect(false);
-        console.log("close connection");
-      };
-      websocket.current.onmessage = data => {
-        console.log("data", data);
-        const { content } = JSON.parse(data.data);
-        setMessage(prev => [...prev, content]);
-      };
-    }
+    websocket.current = new WebSocket(
+      `wss:metawall-websocket.herokuapp.com/?userId=${userInfo._id}`
+    );
+    websocket.current.onopen = () => {
+      setIsConnect(true);
+      console.log("open connection");
+    };
+    websocket.current.onclose = () => {
+      setIsConnect(false);
+      console.log("close connection");
+    };
+    websocket.current.onmessage = data => {
+      const { content, user, createdAt } = JSON.parse(data.data);
+      setMessage(prev => [...prev, { content, user, createdAt }]);
+    };
   }, [isLogin, isConnect]);
 
   const sendMessage = () => {
     if (websocket?.current) {
       websocket.current.send(
-        JSON.stringify({ type: MessageType.GLOBAL_MESSAGE, content: value })
+        JSON.stringify({
+          type: MessageType.GLOBAL_MESSAGE,
+          content: value,
+          user: {
+            _id: userInfo._id,
+            name: userInfo.name,
+            avatar: userInfo.avatar,
+          },
+          createdAt: dayjs().unix(),
+        })
       );
     }
+  };
+
+  const MessageItem = ({ mes }: { mes: Message }) => {
+    const [name, setName] = useState(false);
+    const [time, setTime] = useState(false);
+    const isUser = mes.user._id === userInfo._id;
+    return (
+      <li className={`flex items-center mb-1 ${isUser && "flex-row-reverse"}`}>
+        <div className="flex mx-2">
+          <div
+            className="relative flex flex-col justify-center items-center"
+            onMouseOver={() => setName(true)}
+            onMouseLeave={() => setName(false)}
+          >
+            <Image
+              src={
+                mes.user.avatar && mes.user.avatar !== " "
+                  ? mes.user.avatar
+                  : userDefault
+              }
+              width="40px"
+              height="40px"
+              objectFit="cover"
+            />
+            {name && (
+              <div
+                className={`absolute top-1 bg-white min-w-max px-2 py-1 rounded-md ${
+                  isUser ? "left-11" : "right-11"
+                }`}
+              >
+                {mes.user.name}
+              </div>
+            )}
+          </div>
+        </div>
+        <div
+          className="relative"
+          onMouseOver={() => setTime(true)}
+          onMouseLeave={() => setTime(false)}
+        >
+          <p className="rounded-md p-2 bg-amber-100 ">{mes.content}</p>
+          {time && (
+            <div
+              className={`absolute top-1 bg-white min-w-max px-2 py-1 rounded-md ${
+                isUser ? "right-11" : "left-11"
+              }`}
+            >
+              {dayjs.unix(mes.createdAt ?? 0).format("YYYY/MM/DD HH:mm")}
+            </div>
+          )}
+        </div>
+      </li>
+    );
   };
 
   return (
@@ -60,11 +132,11 @@ export const Chat = () => {
                 <div className="p-4 border-b border-b-primary text-center">
                   即時群聊
                 </div>
-                <div className="min-h-[300px] p-4">
-                  {message.map((content, index) => (
-                    <div key={index}>{content}</div>
+                <ul className="min-h-[300px] py-4 px-2">
+                  {message.map((mes, index) => (
+                    <MessageItem mes={mes} key={index} />
                   ))}
-                </div>
+                </ul>
                 <div className="flex">
                   <Input
                     value={value}
