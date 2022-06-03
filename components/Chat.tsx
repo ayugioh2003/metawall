@@ -1,11 +1,17 @@
 import { CommentOutlined, WechatFilled } from "@ant-design/icons";
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
-import { connectState, loginState, userState } from "../store/states";
+import {
+  connectState,
+  loginState,
+  messageState,
+  userState,
+} from "../store/states";
 import { Input } from "../stories/modules/input/Input";
 import Image from "next/image";
 import userDefault from "../public/image/user_default.png";
 import dayjs from "dayjs";
+import { fetchMessages } from "../api/message";
 
 enum MessageType {
   GLOBAL_MESSAGE = "global-message",
@@ -28,10 +34,15 @@ export const Chat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isConnect, setIsConnect] = useRecoilState(connectState);
   const [userInfo, _setUserInfo] = useRecoilState(userState);
+  const [messageData, setMessageData] = useRecoilState(messageState);
   const [message, setMessage] = useState<any[]>([]);
   const [value, setValue] = useState("");
   const [toast, setToast] = useState(false);
   const websocket = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
   useEffect(() => {
     if (!toast) {
@@ -152,6 +163,9 @@ export const Chat = () => {
                   即時群聊
                 </div>
                 <ul className="min-h-[300px] py-4 px-2">
+                  {messageData.map((mesData, index) => (
+                    <MessageItem mes={mesData} key={index} />
+                  ))}
                   {message.map((mes, index) => (
                     <MessageItem mes={mes} key={index} />
                   ))}

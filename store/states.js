@@ -101,4 +101,7 @@ export const paymentState = atom({
     "TradeSha": "",
     "Version": 1.5,
   },
+export const messageState = atom({
+  key: "messageState",
+  default: [],
 });
