@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 
 enum MessageType {
   GLOBAL_MESSAGE = "global-message",
+  NOTIFICATION = "notification",
 }
 
 interface Message {
@@ -29,7 +30,16 @@ export const Chat = () => {
   const [userInfo, _setUserInfo] = useRecoilState(userState);
   const [message, setMessage] = useState<any[]>([]);
   const [value, setValue] = useState("");
+  const [toast, setToast] = useState(false);
   const websocket = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    if (!toast) {
+      return;
+    }
+    const time = setTimeout(() => setToast(false), 5000);
+    return () => clearTimeout(time);
+  }, [toast]);
 
   useEffect(() => {
     if (!isLogin || isConnect) {
@@ -47,7 +57,11 @@ export const Chat = () => {
       console.log("close connection");
     };
     websocket.current.onmessage = data => {
-      const { content, user, createdAt } = JSON.parse(data.data);
+      const { content, user, createdAt, type } = JSON.parse(data.data);
+      if (type === MessageType.NOTIFICATION) {
+        setToast(content);
+        return;
+      }
       setMessage(prev => [...prev, { content, user, createdAt }]);
     };
   }, [isLogin, isConnect]);
@@ -126,6 +140,11 @@ export const Chat = () => {
     <>
       {isLogin && (
         <div className="fixed bottom-12 left-[calc(80vw_-_72px)] z-10">
+          {toast && (
+            <div className="fixed top-32 left-0 w-screen flex justify-center">
+              <p className="p-2 bg-[#EEC32A] rounded-md">{toast}</p>
+            </div>
+          )}
           <div className="relative">
             {isOpen && (
               <div className="absolute -top-[450px] right-0 w-80 border-4 border-solid border-primary bg-c-bg rounded-md">
