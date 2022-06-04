@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import { FollowButton } from "../followButton/FollowButton";
+import { DonateButton } from "../donateButton/DonateButton";
 
 interface FollowTitleProps {
   src: StaticImageData;
@@ -31,12 +32,15 @@ export const FollowTitle = ({
             <p>{followQuantity}人追蹤</p>
           </div>
         </div>
-        <FollowButton
-          type={type}
-          onButtonClick={() =>
-            setType(type === "follow" ? "unfollow" : "follow")
-          }
-        />
+        <div>
+          <DonateButton />
+          <FollowButton
+            type={type}
+            onButtonClick={() =>
+              setType(type === "follow" ? "unfollow" : "follow")
+            }
+          />
+        </div>
       </div>
       <div className="absolute -bottom-1 -left-1 w-full h-20 border-2 border-solid border-dark"></div>
     </div>

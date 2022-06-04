@@ -10,6 +10,7 @@ interface InputProps {
   size?: string;
   register?: any;
   error?: any;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -23,6 +24,7 @@ export const Input = ({
   register,
   error,
   onChange,
+  disabled,
 }: InputProps) => (
   <>
     <input
@@ -30,8 +32,9 @@ export const Input = ({
       // value={value}
       placeholder={placeholder}
       type={type}
-      className={`${style.input} border-2 border-solid border-dark rounded-none w-full pl-6 ${size ==="small" ? "h-10" : "h-12"} ${className ? className : ""}`}
+      className={`${style.input} border-2 border-solid border-dark rounded-none w-full pl-6 ${size === "small" ? "h-10" : "h-12"} ${className ? className : ""}`}
       onChange={onChange}
+      disabled={disabled}
       {...register}
     />
     {error && (
