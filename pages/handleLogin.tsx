@@ -26,6 +26,7 @@ export const HandleLogin = (props: any) => {
             setUserInfo(res.data.data);
           });
         } else {
+          localStorage.setItem("token", "");
           router.push("/");
         }
       }
