@@ -12,7 +12,7 @@ export async function fetchMessages() {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(response => response.data.data)
+    .then(response => response.data.data.message)
     .catch(error => {
       console.log(error);
       return [];

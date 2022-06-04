@@ -29,6 +29,124 @@ interface Message {
   };
 }
 
+interface UserInfo {
+  _id: string;
+  name: string;
+  avatar: string;
+  gender: string;
+}
+
+const MessageItem = ({
+  mes,
+  userInfo,
+}: {
+  mes: Message;
+  userInfo: UserInfo;
+}) => {
+  const [name, setName] = useState(false);
+  const [nameStyle, setNameStyle] = useState({});
+  const [timeStyle, setTimeStyle] = useState({});
+  const [time, setTime] = useState(false);
+  const nameRef = useRef<HTMLDivElement>(null);
+  const timeRef = useRef<HTMLDivElement>(null);
+  const isUser = mes.user._id === userInfo._id;
+
+  useEffect(() => {
+    if (nameRef?.current) {
+      if (isUser) {
+        setNameStyle({
+          top: `calc(${nameRef?.current?.offsetTop ?? 0}px + 8px)`,
+          left: `calc(${nameRef?.current?.offsetLeft ?? 0}px + 48px)`,
+        });
+      } else {
+        setNameStyle({
+          top: `calc(${nameRef?.current?.offsetTop ?? 0}px + 8px)`,
+          left: `calc(${nameRef?.current?.offsetLeft ?? 0}px - 88px)`,
+        });
+      }
+    }
+  }, [nameRef?.current]);
+
+  useEffect(() => {
+    if (timeRef?.current) {
+      console.log("timeRef?.current", timeRef);
+      console.log(
+        "timeRef?.current?.offsetWidth",
+        timeRef?.current?.offsetWidth
+      );
+      console.log(
+        " timeRef?.current?.offsetLeft",
+        timeRef?.current?.offsetLeft
+      );
+      if (isUser) {
+        setTimeStyle({
+          top: `calc(${timeRef?.current?.offsetTop ?? 0}px + 8px)`,
+          left: `calc(${timeRef?.current?.offsetLeft ?? 0}px - 156px)`,
+        });
+      } else {
+        setTimeStyle({
+          top: `calc(${timeRef?.current?.offsetTop ?? 0}px + 8px)`,
+          left: `calc(${
+            (timeRef?.current?.offsetLeft ?? 0) +
+            (timeRef?.current?.offsetWidth ?? 0)
+          }px + 8px)`,
+        });
+      }
+    }
+  }, [timeRef?.current]);
+
+  return (
+    <li className={`flex items-center mb-1 ${isUser && "flex-row-reverse"}`}>
+      <div className="flex mx-2">
+        <div
+          className="flex flex-col justify-center items-center"
+          ref={nameRef}
+          onMouseOver={() => setName(true)}
+          onMouseLeave={() => setName(false)}
+        >
+          <Image
+            src={
+              mes.user.avatar && mes.user.avatar !== " "
+                ? mes.user.avatar
+                : userDefault
+            }
+            width="40px"
+            height="40px"
+            objectFit="cover"
+          />
+          {name && (
+            <div
+              className={`absolute bg-white min-w-max px-2 py-1 rounded-md`}
+              style={nameStyle}
+            >
+              {mes.user.name}
+            </div>
+          )}
+        </div>
+      </div>
+      <div
+        onMouseOver={() => setTime(true)}
+        onMouseLeave={() => setTime(false)}
+      >
+        <div
+          className="rounded-md p-2 bg-amber-100 max-w-[220px] line-clamp-6"
+          ref={timeRef}
+        >
+          {mes.content}
+        </div>
+        {time && (
+          <div
+            className={`absolute bg-white w-max px-2 py-1 rounded-md`}
+            style={timeStyle}
+          >
+            {dayjs.unix(mes.createdAt ?? 0).format("YYYY/MM/DD HH:mm")}
+          </div>
+        )}
+      </div>
+    </li>
+  );
+};
+
 export const Chat = () => {
   const [isLogin, _setIsLogin] = useRecoilState(loginState);
   const [isOpen, setIsOpen] = useState(false);
@@ -38,11 +156,17 @@ export const Chat = () => {
   const [message, setMessage] = useState<any[]>([]);
   const [value, setValue] = useState("");
   const [toast, setToast] = useState(false);
+  const [oldMessage, setOldMessage] = useState(false);
   const websocket = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    fetchMessages();
-  }, []);
+    if (!isLogin) {
+      return;
+    }
+    fetchMessages().then(data => {
+      setMessageData(data);
+    });
+  }, [isLogin]);
 
   useEffect(() => {
     if (!toast) {
@@ -73,6 +197,7 @@ export const Chat = () => {
         setToast(content);
         return;
       }
+      console.log("messagedata", data.data);
       setMessage(prev => [...prev, { content, user, createdAt }]);
     };
   }, [isLogin, isConnect]);
@@ -94,59 +219,6 @@ export const Chat = () => {
     }
   };
 
-  const MessageItem = ({ mes }: { mes: Message }) => {
-    const [name, setName] = useState(false);
-    const [time, setTime] = useState(false);
-    const isUser = mes.user._id === userInfo._id;
-    return (
-      <li className={`flex items-center mb-1 ${isUser && "flex-row-reverse"}`}>
-        <div className="flex mx-2">
-          <div
-            className="relative flex flex-col justify-center items-center"
-            onMouseOver={() => setName(true)}
-            onMouseLeave={() => setName(false)}
-          >
-            <Image
-              src={
-                mes.user.avatar && mes.user.avatar !== " "
-                  ? mes.user.avatar
-                  : userDefault
-              }
-              width="40px"
-              height="40px"
-              objectFit="cover"
-            />
-            {name && (
-              <div
-                className={`absolute top-1 bg-white min-w-max px-2 py-1 rounded-md ${
-                  isUser ? "left-11" : "right-11"
-                }`}
-              >
-                {mes.user.name}
-              </div>
-            )}
-          </div>
-        </div>
-        <div
-          className="relative"
-          onMouseOver={() => setTime(true)}
-          onMouseLeave={() => setTime(false)}
-        >
-          <p className="rounded-md p-2 bg-amber-100 ">{mes.content}</p>
-          {time && (
-            <div
-              className={`absolute top-1 bg-white min-w-max px-2 py-1 rounded-md ${
-                isUser ? "right-11" : "left-11"
-              }`}
-            >
-              {dayjs.unix(mes.createdAt ?? 0).format("YYYY/MM/DD HH:mm")}
-            </div>
-          )}
-        </div>
-      </li>
-    );
-  };
-
   return (
     <>
       {isLogin && (
@@ -162,14 +234,29 @@ export const Chat = () => {
                 <div className="p-4 border-b border-b-primary text-center">
                   即時群聊
                 </div>
-                <ul className="min-h-[300px] py-4 px-2">
-                  {messageData.map((mesData, index) => (
-                    <MessageItem mes={mesData} key={index} />
-                  ))}
-                  {message.map((mes, index) => (
-                    <MessageItem mes={mes} key={index} />
-                  ))}
-                </ul>
+                <div className="relative">
+                  <ul className="h-[300px] overflow-y-auto py-4 px-2">
+                    <div className="flex justify-center items-center mb-2">
+                      <button
+                        className="bg-primary font-medium p-2 rounded-md text-white"
+                        onClick={() => setOldMessage(!oldMessage)}
+                      >
+                        {oldMessage ? "關閉以往訊息" : "打開以往訊息"}
+                      </button>
+                    </div>
+                    {oldMessage &&
+                      messageData.map((mesData, index) => (
+                        <MessageItem
+                          mes={mesData}
+                          userInfo={userInfo}
+                          key={index}
+                        />
+                      ))}
+                    {message.map((mes, index) => (
+                      <MessageItem mes={mes} userInfo={userInfo} key={index} />
+                    ))}
+                  </ul>
+                </div>
                 <div className="flex">
                   <Input
                     value={value}
