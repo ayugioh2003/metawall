@@ -17,7 +17,7 @@ interface OptionListProps {
  */
 export const OptionList = ({ options }: OptionListProps) => {
   const router = useRouter();
-  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [userInfo, _setUserInfo] = useRecoilState(userState);
   const newOptions = [
     { name: userInfo.name, icon: userInfo.avatar },
     ...options,
@@ -47,6 +47,7 @@ export const OptionList = ({ options }: OptionListProps) => {
             <BellOutlined className="text-xl flex justify-center items-center" />
           }
           className="my-5"
+          onButtonClick={() => router.push("/followList")}
         />
         <SettingButton
           text="我按讚的文章"
