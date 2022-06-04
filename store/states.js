@@ -94,13 +94,15 @@ export const searchState = atom({
 export const paymentState = atom({
   key: "paymentState",
   default: {
-    "MerchantID": "",
-    "MerchantOrderNo": 0,
-    "PayGateWay": "https://ccore.newebpay.com/MPG/mpg_gateway",
-    "TradeInfo": "",
-    "TradeSha": "",
-    "Version": 1.5,
+    MerchantID: "",
+    MerchantOrderNo: 0,
+    PayGateWay: "https://ccore.newebpay.com/MPG/mpg_gateway",
+    TradeInfo: "",
+    TradeSha: "",
+    Version: 1.5,
   },
+});
+
 export const messageState = atom({
   key: "messageState",
   default: [],

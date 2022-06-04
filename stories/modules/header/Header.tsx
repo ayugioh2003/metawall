@@ -26,7 +26,7 @@ export const Header = ({ className }: HeaderProps) => {
 
   return (
     <header
-      className={`w-full bg-white border-b-[3px] border-b-solid border-b-header-border flex justify-center ${className}`}
+      className={`w-full px-4 bg-white border-b-[3px] border-b-solid border-b-header-border flex justify-center ${className}`}
     >
       <div className="max-w-[1200px] w-full flex justify-between py-3">
         <p
