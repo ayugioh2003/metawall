@@ -15,24 +15,13 @@ export async function getPayment(data: any) {
         Authorization: `Bearer ${token}`,
       },
     })
-    .catch(error => console.log(error));
-}
-
-export async function donate(data: any) {
-  const API = data.PayGateWay;
-  const bodyFormData = new FormData();
-  Object.keys(data).forEach(key => {
-    bodyFormData.append(key, data[key]);
-  })
-
-  return await axios.post(API, bodyFormData)
-    .catch(err => {
-      console.log(err)
+    .catch(error => {
+      console.log(error)
       Swal.fire({
         title: "Error!",
         text: "贊助失敗，請洽網站管理員",
         icon: "error",
         confirmButtonText: "我知道了",
       });
-    })
+    });
 }
