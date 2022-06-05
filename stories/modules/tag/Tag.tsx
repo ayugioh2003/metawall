@@ -43,7 +43,7 @@ export const Tag = ({}: TagProps) => {
   const updateUserData = async (data: any) => {
     setIsLoading(true);
     const { userName, gender } = data;
-    let avatar = src;
+    let avatar = typeof src === "string" ? src : "";
     if (image?.imageSize) {
       const imageData = await fetchUploadImage(image.imageFile);
       if (!imageData.data) {
@@ -63,16 +63,17 @@ export const Tag = ({}: TagProps) => {
       name: userName,
       gender,
       avatar,
-    }).then(async () => {
-      await fetchCurrentUser().then(res => {
-        setUserInfo(res.data.data);
-        Swal.fire({
-          title: "Success!",
-          text: "修改個人資料成功",
-          icon: "success",
-          confirmButtonText: "我知道了",
+    }).then(async res => {
+      if (res && res.data)
+        await fetchCurrentUser().then(res => {
+          setUserInfo(res.data.data);
+          Swal.fire({
+            title: "Success!",
+            text: "修改個人資料成功",
+            icon: "success",
+            confirmButtonText: "我知道了",
+          });
         });
-      });
     });
     setIsLoading(false);
   };
