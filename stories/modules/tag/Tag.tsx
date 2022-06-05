@@ -56,7 +56,7 @@ export const Tag = ({}: TagProps) => {
         setIsLoading(false);
         return;
       }
-      avatar = imageData.data.data.url
+      avatar = imageData.data.data.url;
     }
 
     await resetUserinfo({
@@ -219,7 +219,6 @@ export const Tag = ({}: TagProps) => {
               <Button
                 type="submit"
                 label="送出更新"
-                active={isValid && !isError}
                 disable={!isValid || isError}
               />
             </div>
