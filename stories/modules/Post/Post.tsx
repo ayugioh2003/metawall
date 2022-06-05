@@ -63,6 +63,7 @@ export const Post = ({
       className={`bg-white border-2 border-b-4 border-dark border-solid rounded-lg w-full min-w-[300px] p-6 ${className}`}
     >
       <User
+        id={user.id}
         userName={user.name}
         width="45px"
         height="45px"
@@ -143,6 +144,7 @@ export const Post = ({
           commentData.map((comment, index) => (
             <div key={index} className="bg-c-bg/30 p-4 mb-4">
               <User
+                id={comment.user.id}
                 userName={comment.user.name}
                 width="45px"
                 height="45px"

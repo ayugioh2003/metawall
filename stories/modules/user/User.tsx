@@ -5,6 +5,7 @@ import userDefault from "../../../public/image/user_default.png";
 import { useRouter } from "next/router";
 
 interface UserProps {
+  id?: string;
   userName: string;
   avatar: StaticImageData | string;
   width?: string;
@@ -20,6 +21,7 @@ interface UserProps {
  * Primary UI component for user interaction
  */
 export const User = ({
+  id = "",
   userName = "Member",
   avatar,
   width = "30px",
@@ -35,7 +37,7 @@ export const User = ({
     <div className={`flex mr-2.5 ${className}`}>
       <div
         className="flex justify-center items-center mr-4 cursor-pointer"
-        onClick={() => router.push("/userWall")}
+        onClick={() => router.push(`/userWall/${id}`)}
       >
         {typeof avatar !== "string" || !avatar || avatar === " " ? (
           <Image

@@ -1,15 +1,15 @@
 import type { NextPage } from "next";
 import { useState } from "react";
-import { Header } from "../stories/modules/header/Header";
-import { OptionList } from "../stories/modules/optionList/OptionList";
-import { Post } from "../stories/modules/Post/Post";
-import user4 from "../public/image/user4.png";
-import { FollowTitle } from "../stories/modules/followTitle/FollowTitle";
-import { SearchBar } from "../stories/modules/searchBar/SearchBar";
+import { Header } from "../../stories/modules/header/Header";
+import { OptionList } from "../../stories/modules/optionList/OptionList";
+import { Post } from "../../stories/modules/Post/Post";
+import user4 from "../../public/image/user4.png";
+import { FollowTitle } from "../../stories/modules/followTitle/FollowTitle";
+import { SearchBar } from "../../stories/modules/searchBar/SearchBar";
 import { useRecoilState } from "recoil";
-import { postState } from "../store/states";
-import { PostProps } from "./post";
-import { ToggleLikeParam } from "./post";
+import { postState } from "../../store/states";
+import { PostProps } from "../post";
+import { ToggleLikeParam } from "../post";
 
 export const UserWallPage: NextPage = () => {
   const [options, setOptions] = useState([]);

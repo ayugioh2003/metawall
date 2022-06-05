@@ -23,6 +23,7 @@ export const FollowListPage: NextPage = () => {
                 className="flex justify-between items-center border-2 border-solid border-dark border-b-4 bg-white rounded-lg p-4 mb-4"
               >
                 <User
+                  id={follow.id}
                   userName={follow.userName}
                   follow={follow.followTime}
                   avatar={follow.userIcon}

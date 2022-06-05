@@ -41,6 +41,7 @@ export const Header = ({ className }: HeaderProps) => {
           onMouseLeave={() => setDropdown(false)}
         >
           <User
+            id={userInfo._id}
             userName={userInfo.name}
             avatar={userInfo.avatar ?? userDefault}
             bottomLine
@@ -52,7 +53,7 @@ export const Header = ({ className }: HeaderProps) => {
           >
             <p
               className="py-2 border-b-2 border-b-solid border-b-dark text-center hover:bg-c-bg cursor-pointer"
-              onClick={() => router.push("/userWall")}
+              onClick={() => router.push(`/userWall/${userInfo._id}`)}
             >
               我的貼文牆
             </p>

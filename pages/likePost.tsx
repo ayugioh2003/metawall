@@ -54,6 +54,7 @@ export const LikePostPage: NextPage = () => {
                     className="flex justify-between items-center border-2 border-solid border-dark border-b-4 bg-white rounded-lg p-4 mb-4"
                   >
                     <User
+                      id={post._id}
                       userName={post.user.name}
                       postCreateAt={post.createdAt}
                       avatar={post.user.avatar}

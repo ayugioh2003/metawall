@@ -15,6 +15,7 @@ import { StaticImageData } from "next/image";
 export interface PostProps {
   _id?: string;
   user: {
+    id?: string;
     name: string;
     avatar: string | StaticImageData;
   };

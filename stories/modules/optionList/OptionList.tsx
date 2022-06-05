@@ -9,7 +9,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "../../../store/states";
 
 interface OptionListProps {
-  options: { name: string; icon: StaticImageData }[];
+  options: { id?: string; name: string; icon: StaticImageData }[];
 }
 
 /**
@@ -19,7 +19,7 @@ export const OptionList = ({ options }: OptionListProps) => {
   const router = useRouter();
   const [userInfo, _setUserInfo] = useRecoilState(userState);
   const newOptions = [
-    { name: userInfo.name, icon: userInfo.avatar },
+    { id: userInfo._id, name: userInfo.name, icon: userInfo.avatar },
     ...options,
   ];
 
@@ -35,6 +35,7 @@ export const OptionList = ({ options }: OptionListProps) => {
           <User
             className="mt-4"
             key={option.name}
+            id={option.id}
             userName={option.name}
             avatar={option.icon}
             width="50px"
