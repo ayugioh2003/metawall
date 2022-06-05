@@ -69,15 +69,6 @@ const MessageItem = ({
 
   useEffect(() => {
     if (timeRef?.current) {
-      console.log("timeRef?.current", timeRef);
-      console.log(
-        "timeRef?.current?.offsetWidth",
-        timeRef?.current?.offsetWidth
-      );
-      console.log(
-        " timeRef?.current?.offsetLeft",
-        timeRef?.current?.offsetLeft
-      );
       if (isUser) {
         setTimeStyle({
           top: `calc(${timeRef?.current?.offsetTop ?? 0}px + 8px)`,
@@ -139,7 +130,7 @@ const MessageItem = ({
             className={`absolute bg-white w-max px-2 py-1 rounded-md`}
             style={timeStyle}
           >
-            {dayjs.unix(mes.createdAt ?? 0).format("YYYY/MM/DD HH:mm")}
+            {dayjs(mes.createdAt ?? 0).format("YYYY/MM/DD HH:mm")}
           </div>
         )}
       </div>
@@ -197,7 +188,6 @@ export const Chat = () => {
         setToast(content);
         return;
       }
-      console.log("messagedata", data.data);
       setMessage(prev => [...prev, { content, user, createdAt }]);
     };
   }, [isLogin, isConnect]);
@@ -213,7 +203,7 @@ export const Chat = () => {
             name: userInfo.name,
             avatar: userInfo.avatar,
           },
-          createdAt: dayjs().unix(),
+          createdAt: dayjs().valueOf(),
         })
       );
     }
@@ -244,14 +234,18 @@ export const Chat = () => {
                         {oldMessage ? "關閉以往訊息" : "打開以往訊息"}
                       </button>
                     </div>
-                    {oldMessage &&
-                      messageData.map((mesData, index) => (
-                        <MessageItem
-                          mes={mesData}
-                          userInfo={userInfo}
-                          key={index}
-                        />
-                      ))}
+                    {oldMessage && (
+                      <>
+                        {messageData.map((mesData, index) => (
+                          <MessageItem
+                            mes={mesData}
+                            userInfo={userInfo}
+                            key={index}
+                          />
+                        ))}
+                        <div className="w-full h-0 border-b border-b-soild border-b-primary my-2 " />
+                      </>
+                    )}
                     {message.map((mes, index) => (
                       <MessageItem mes={mes} userInfo={userInfo} key={index} />
                     ))}

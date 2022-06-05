@@ -34,7 +34,6 @@ export const SearchBar = ({ className }: SearchBarProps) => {
         postType: value.postType as string,
         search: value.search as string,
       });
-      console.log(value);
     });
     return () => subscription.unsubscribe();
   }, [watch, setSearchData]);

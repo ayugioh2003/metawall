@@ -28,7 +28,7 @@ export async function addPost(data: any) {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(res => console.log(res))
+    .then(res => res)
     .catch(error => {
       console.log(error);
       Swal.fire({
@@ -42,13 +42,11 @@ export async function addPost(data: any) {
 
 export async function getUserLikes() {
   return await axios
-    .get(
-      `${path}/likes`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+    .get(`${path}/likes`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => response.data.data)
     .catch(error => {
       console.log(error);
