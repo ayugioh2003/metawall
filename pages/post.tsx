@@ -33,9 +33,7 @@ export interface ToggleLikeParam {
 }
 
 export const PostPage: NextPage = () => {
-  const [options, _setOptions] = useState([
-    { name: "杰哥後援會", icon: user5 },
-  ]);
+  const [options, _setOptions] = useState([]);
   const [postData, setPostData] = useRecoilState(postState);
   const [isLoading, setIsLoading] = useRecoilState(loadingState);
 
