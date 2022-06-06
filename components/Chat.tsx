@@ -12,6 +12,7 @@ import Image from "next/image";
 import userDefault from "../public/image/user_default.png";
 import dayjs from "dayjs";
 import { fetchMessages } from "../api/message";
+import { useRouter } from "next/router";
 
 enum MessageType {
   GLOBAL_MESSAGE = "global-message",
@@ -150,15 +151,20 @@ export const Chat = () => {
   const [toast, setToast] = useState(false);
   const [oldMessage, setOldMessage] = useState(false);
   const websocket = useRef<WebSocket | null>(null);
+  const router = useRouter();
 
-  useEffect(() => {
-    if (!isLogin) {
-      return;
-    }
+  const getOldMessage = () => {
     fetchMessages().then(data => {
       setMessageData(data);
     });
-  }, [isLogin]);
+  };
+
+  useEffect(() => {
+    if (!isLogin || router.pathname === "/") {
+      return;
+    }
+    getOldMessage();
+  }, [isLogin, router]);
 
   useEffect(() => {
     if (!toast) {
@@ -169,7 +175,18 @@ export const Chat = () => {
   }, [toast]);
 
   useEffect(() => {
-    if (!isLogin || isConnect) {
+    if (!isLogin) {
+      setIsConnect(false);
+      if (websocket?.current) {
+        websocket.current.send(
+          JSON.stringify({
+            isClose: true,
+          })
+        );
+      }
+      return;
+    }
+    if (isConnect) {
       return;
     }
     websocket.current = new WebSocket(

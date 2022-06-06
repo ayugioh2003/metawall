@@ -2,17 +2,16 @@ import axios from "../utils/axiosConfig";
 import Swal from "sweetalert2";
 
 const path = "/api/comments";
-let token: string | null = "";
-if (typeof window !== "undefined") {
-  token = localStorage.getItem("token");
-}
-
 interface AddCommentParam {
   post_id?: string;
   content: string;
 }
 
 export async function fetchGetComment(postId?: string) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   return await axios
     .get(`${path}/${postId}`, {
       headers: {
@@ -27,6 +26,10 @@ export async function fetchGetComment(postId?: string) {
 }
 
 export async function fetchAddComment(data: AddCommentParam) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   return await axios
     .post(path, data, {
       headers: {
