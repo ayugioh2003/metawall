@@ -96,6 +96,7 @@ const MessageItem = ({
           onMouseLeave={() => setName(false)}
         >
           <Image
+            className="rounded-full"
             src={
               mes.user.avatar && mes.user.avatar !== " "
                 ? mes.user.avatar
