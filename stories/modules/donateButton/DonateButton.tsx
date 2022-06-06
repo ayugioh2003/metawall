@@ -5,12 +5,15 @@ import { userState, loadingState, paymentState } from "../../../store/states";
 import { Input } from "../input/Input";
 import { getPayment } from "../../../api/payment";
 
-interface DonateButtonProps { }
+interface DonateButtonProps {
+  userId: string;
+  userName: string;
+}
 
 /**
  * Primary UI component for user interaction
  */
-export const DonateButton = ({ }: DonateButtonProps) => {
+export const DonateButton = ({ userId, userName }: DonateButtonProps) => {
   const [userInfo, _setUserInfo] = useRecoilState(userState);
   const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const [showModal, setShowModal] = useState(false);
@@ -28,8 +31,8 @@ export const DonateButton = ({ }: DonateButtonProps) => {
     const params = {
       Amt: Number(Amt),
       Comment,
-      user_id: "6281b760628bc7e95641fa81",
-      Desc: 'Donate Test',
+      user_id: userId,
+      Desc: `Donate to ${userName}`,
       login_user_id: userInfo._id,
     }
     await getPayment(params).then((res: any) => {
@@ -76,7 +79,7 @@ export const DonateButton = ({ }: DonateButtonProps) => {
           >
             <div className="flex justify-between items-start p-4 rounded-t border-b border-gray-400">
               <h3 className="text-xl font-semibold text-gray-900">
-                贊助內容
+                贊助給 {userName}
               </h3>
               <button
                 type="button"

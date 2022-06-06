@@ -63,6 +63,7 @@ export const UserWallPage: NextPage = () => {
         <main className="max-w-[1200px] w-full flex justify-between">
           <div className="w-3/4 pr-7">
             <FollowTitle
+              userId={userData._id}
               src={userData.avatar}
               followName={userData.name}
               followQuantity={userData.follower || 0}

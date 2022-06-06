@@ -5,6 +5,7 @@ import { DonateButton } from "../donateButton/DonateButton";
 import userDefault from "../../../public/image/user_default.png";
 
 interface FollowTitleProps {
+  userId: string;
   src: StaticImageData | string;
   followName: string;
   followQuantity: number;
@@ -15,6 +16,7 @@ interface FollowTitleProps {
  * Primary UI component for user interaction
  */
 export const FollowTitle = ({
+  userId,
   src,
   followName,
   followQuantity,
@@ -50,7 +52,7 @@ export const FollowTitle = ({
           </div>
         </div>
         <div>
-          <DonateButton />
+          <DonateButton userId={userId} userName={followName} />
           <FollowButton
             type={type}
             onButtonClick={() =>
