@@ -22,7 +22,6 @@ export const FollowTitle = ({
   followQuantity,
   className,
 }: FollowTitleProps) => {
-  const [type, setType] = useState<"follow" | "unfollow">("follow");
   const size = '76px'
   return (
     <div className={`relative w-full min-w-[500px] h-20 ${className}`}>
@@ -53,12 +52,7 @@ export const FollowTitle = ({
         </div>
         <div>
           <DonateButton userId={userId} userName={followName} />
-          <FollowButton
-            type={type}
-            onButtonClick={() =>
-              setType(type === "follow" ? "unfollow" : "follow")
-            }
-          />
+          <FollowButton userId={userId} />
         </div>
       </div>
       <div className="absolute -bottom-1 -left-1 w-full h-20 border-2 border-solid border-dark"></div>
