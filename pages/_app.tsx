@@ -13,8 +13,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <RecoilRoot>
         <HandleLogin>
-          <Chat />
           <Component {...pageProps} />
+          <Chat />
         </HandleLogin>
       </RecoilRoot>
     </>
