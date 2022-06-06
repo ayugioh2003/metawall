@@ -7,6 +7,17 @@ if (typeof window !== "undefined") {
   token = localStorage.getItem("token");
 }
 
+export async function fetchUser(userId:string) {
+  return await axios
+    .get(`${path}/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response)
+    .catch(error => error);
+}
+
 export async function fetchCurrentUser() {
   return await axios
     .get(`${path}/current-userinfo`, {
