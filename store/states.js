@@ -29,6 +29,8 @@ export const userState = atom({
     password: "1234qwer",
     avatar: "https://mopcon.org/api/2019/speaker/images/web/speaker_38",
     gender: "male",
+    followings: [],
+    followers: [],
   },
 });
 

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Image, { StaticImageData } from "next/image";
+import { useRecoilState } from "recoil";
+import { userState } from "../../../store/states";
 import { FollowButton } from "../followButton/FollowButton";
 import { DonateButton } from "../donateButton/DonateButton";
 import userDefault from "../../../public/image/user_default.png";
@@ -22,6 +24,7 @@ export const FollowTitle = ({
   followQuantity,
   className,
 }: FollowTitleProps) => {
+  const [userInfo, _setUserInfo] = useRecoilState(userState);
   const size = '76px'
   return (
     <div className={`relative w-full min-w-[500px] h-20 ${className}`}>
@@ -50,10 +53,12 @@ export const FollowTitle = ({
             <p>{followQuantity}人追蹤</p>
           </div>
         </div>
-        <div>
-          <DonateButton userId={userId} userName={followName} />
-          <FollowButton userId={userId} />
-        </div>
+        {userInfo._id !== userId &&
+          <div>
+            <DonateButton userId={userId} userName={followName} />
+            <FollowButton userId={userId} />
+          </div>
+        }
       </div>
       <div className="absolute -bottom-1 -left-1 w-full h-20 border-2 border-solid border-dark"></div>
     </div>

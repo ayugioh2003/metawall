@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRecoilState } from "recoil";
 import { loadingState } from "../../../store/states";
-import { toggleFollow } from "../../../api/followings";
+import { getFollowings, toggleFollow } from "../../../api/followings";
 import Swal from "sweetalert2";
 
 interface FollowButtonProps {
@@ -22,7 +22,7 @@ export const FollowButton = ({
   const changeFollow = async () => {
     setIsLoading(true);
     await toggleFollow({ userId, changeToFollow: type === "follow" })
-      .then(res => {
+      .then(async res => {
         if (res) {
           setType(type === "follow" ? "unfollow" : "follow")
           Swal.fire({
@@ -35,6 +35,26 @@ export const FollowButton = ({
       });
     setIsLoading(false);
   }
+
+  const fetchFollowing = useCallback(async () => {
+    setIsLoading(true);
+    await getFollowings().then(res => {
+      if (res) {
+        const currentUserfollowings = res[0].followings.map((x: any) => x.user.id)
+        setType(currentUserfollowings.indexOf(userId) > -1 ? "unfollow" : "follow")
+      }
+    })
+    setIsLoading(false);
+  }, [setIsLoading, setType, userId])
+
+
+  useEffect(() => {
+    fetchFollowing();
+    // setIsLoading(true);
+    // const followings = userInfo.followings.map((x: any) => x.user);
+    // setType(followings.indexOf(userId) > -1 ? "unfollow" : "follow")
+    // setIsLoading(false);
+  }, [fetchFollowing])
 
   return (
     <button
