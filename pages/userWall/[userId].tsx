@@ -11,6 +11,7 @@ import { loadingState, postState } from "../../store/states";
 import { PostProps } from "../post";
 import { ToggleLikeParam } from "../post";
 import { fetchUser } from "../../api/user";
+import { getPosts } from "../../api/posts";
 
 export const UserWallPage: NextPage = () => {
   const router = useRouter();
@@ -29,7 +30,7 @@ export const UserWallPage: NextPage = () => {
     console.log(postId, changeToLike);
   };
 
-  const fetch = useCallback(
+  const fetchUserData = useCallback(
     async () => {
       setIsLoading(true);
       await fetchUser(userId as string).then(res => {
@@ -40,9 +41,20 @@ export const UserWallPage: NextPage = () => {
     }, [userId, setIsLoading]
   );
 
+  const fetchPost = useCallback(
+    async () => {
+      setIsLoading(true);
+      await getPosts(`user_id=${userId}`).then(data => {
+        setPostData(data);
+      });
+      setIsLoading(false);
+    }, [userId, setIsLoading, setPostData]
+  );
+
   useEffect(() => {
-    fetch();
-  }, [fetch])
+    fetchUserData();
+    fetchPost();
+  }, [fetchUserData, fetchPost])
 
   return (
     <>
