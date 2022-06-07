@@ -214,6 +214,9 @@ export const Chat = () => {
   }, [isLogin, isConnect]);
 
   const sendMessage = () => {
+    if (!value) {
+      return;
+    }
     if (websocket?.current) {
       websocket.current.send(
         JSON.stringify({
@@ -285,8 +288,10 @@ export const Chat = () => {
                   </ul>
                 </div>
                 <div className="flex">
-                  <Input
+                  <input
                     value={value}
+                    placeholder="請輸入聊天訊息"
+                    className={`input border-2 border-solid border-dark rounded-none w-full pl-6 h-12 `}
                     onChange={e => setValue(e.target.value)}
                   />
                   <div>
