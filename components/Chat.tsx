@@ -224,6 +224,7 @@ export const Chat = () => {
           createdAt: dayjs().valueOf(),
         })
       );
+      setValue("");
     }
   };
 
