@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Header } from "../stories/modules/header/Header";
 import { OptionList } from "../stories/modules/optionList/OptionList";
 import { Post } from "../stories/modules/Post/Post";
@@ -15,6 +15,7 @@ import { StaticImageData } from "next/image";
 export interface PostProps {
   _id?: string;
   user: {
+    id?: string;
     name: string;
     avatar: string | StaticImageData;
   };
@@ -28,27 +29,26 @@ export interface PostProps {
 }
 
 export interface ToggleLikeParam {
-  postId: string,
-  changeToLike: boolean
+  postId: string;
+  changeToLike: boolean;
 }
 
 export const PostPage: NextPage = () => {
   const [options, _setOptions] = useState([]);
   const [postData, setPostData] = useRecoilState(postState);
-  const [isLoading, setIsLoading] = useRecoilState(loadingState);
+  const [_isLoading, setIsLoading] = useRecoilState(loadingState);
 
   const getData = () => {
     getPosts().then(data => {
       setPostData(data);
     });
-  }
+  };
 
   const togglePostLike = async ({ postId, changeToLike }: ToggleLikeParam) => {
     setIsLoading(true);
-    await toggleLike({ postId, changeToLike })
-      .then(data => getData())
+    await toggleLike({ postId, changeToLike }).then(data => getData());
     setIsLoading(false);
-  }
+  };
 
   useEffect(() => {
     getData();
@@ -57,7 +57,7 @@ export const PostPage: NextPage = () => {
   return (
     <>
       <Header />
-      <div className="flex justify-center min-h-screen h-full pt-4 px-3 pb-20 md:px-0 md:pt-12 bg-c-bg">
+      <div className="flex justify-center min-h-screen h-full pt-4 px-4 pb-20 md:pt-12 bg-c-bg">
         <main className="max-w-[1200px] w-full flex justify-between">
           <div className="w-full md:w-3/4 md:pr-7">
             <SearchBar />

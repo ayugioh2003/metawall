@@ -7,9 +7,12 @@ import dayjs from "dayjs";
 
 export const loginState = atom({
   key: "loginState",
-  default: {
-    isLogin: false,
-  },
+  default: false,
+});
+
+export const connectState = atom({
+  key: "connectState",
+  default: false,
 });
 
 export const loadingState = atom({
@@ -38,6 +41,7 @@ export const followListState = atom({
   key: "followListState",
   default: [
     {
+      id: "1",
       userName: "波吉",
       userIcon: user1,
       date: dayjs().format("YYYY/MM/DD HH:mm"),
@@ -45,6 +49,7 @@ export const followListState = atom({
       followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
     },
     {
+      id: "2",
       userName: "多魯米",
       userIcon: user51,
       date: dayjs().format("YYYY/MM/DD HH:mm"),
@@ -59,6 +64,7 @@ export const followListState = atom({
       followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
     },
     {
+      id: "3",
       userName: "希琳",
       userIcon: user5,
       date: dayjs().format("YYYY/MM/DD HH:mm"),
@@ -66,6 +72,7 @@ export const followListState = atom({
       followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
     },
     {
+      id: "4",
       userName: "多瑪斯",
       userIcon: user1,
       date: dayjs().format("YYYY/MM/DD HH:mm"),
@@ -91,11 +98,16 @@ export const searchState = atom({
 export const paymentState = atom({
   key: "paymentState",
   default: {
-    "MerchantID": "",
-    "MerchantOrderNo": 0,
-    "PayGateWay": "https://ccore.newebpay.com/MPG/mpg_gateway",
-    "TradeInfo": "",
-    "TradeSha": "",
-    "Version": 1.5,
+    MerchantID: "",
+    MerchantOrderNo: 0,
+    PayGateWay: "https://ccore.newebpay.com/MPG/mpg_gateway",
+    TradeInfo: "",
+    TradeSha: "",
+    Version: 1.5,
   },
+});
+
+export const messageState = atom({
+  key: "messageState",
+  default: [],
 });

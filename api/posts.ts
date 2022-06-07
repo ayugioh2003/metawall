@@ -2,12 +2,13 @@ import axios from "../utils/axiosConfig";
 import Swal from "sweetalert2";
 
 const path = "/api/posts";
-let token: string | null = "";
-if (typeof window !== "undefined") {
-  token = localStorage.getItem("token");
-}
 
 export async function getPosts(query?: string) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+
   return await axios
     .get(`${path}${query ? `?${query}` : ""}`, {
       headers: {
@@ -22,13 +23,18 @@ export async function getPosts(query?: string) {
 }
 
 export async function addPost(data: any) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+
   return await axios
     .post(path, data, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then(res => console.log(res))
+    .then(res => res)
     .catch(error => {
       console.log(error);
       Swal.fire({
@@ -41,14 +47,17 @@ export async function addPost(data: any) {
 }
 
 export async function getUserLikes() {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+
   return await axios
-    .get(
-      `${path}/likes`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+    .get(`${path}/likes`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => response.data.data)
     .catch(error => {
       console.log(error);

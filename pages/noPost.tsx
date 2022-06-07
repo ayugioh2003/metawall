@@ -10,7 +10,7 @@ export const NoPostPage: NextPage = () => {
   return (
     <>
       <Header />
-      <div className="flex justify-center min-h-screen h-full pt-12 bg-c-bg">
+      <div className="flex justify-center min-h-screen h-full pt-12 px-4 bg-c-bg">
         <main className="max-w-[1200px] w-full flex justify-between">
           <div className="w-3/4 pr-7">
             <SearchBar />

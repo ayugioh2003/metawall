@@ -20,14 +20,6 @@ const Template: ComponentStory<typeof Input> = args => {
   return <Input {...args} value={value} onChange={onChange} />;
 };
 
-const ErrorTemplate: ComponentStory<typeof Input> = args => {
-  const [value, setValue] = useState("波");
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-  return <Input {...args} value={value} onChange={onChange} />;
-};
-
 export const EmailTemplate = Template.bind({});
 EmailTemplate.args = {
   placeholder: "Email",

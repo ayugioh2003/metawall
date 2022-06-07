@@ -1,11 +1,11 @@
 import React from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Input } from "../../../stories/modules/input/Input";
 import { Select } from "../../../stories/modules/select/Select";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import { postState, searchState } from "../../../store/states";
+import { loadingState, postState, searchState } from "../../../store/states";
 import { getPosts } from "../../../api/posts";
 
 interface SearchBarProps {
@@ -17,12 +17,16 @@ interface SearchBarProps {
  */
 export const SearchBar = ({ className }: SearchBarProps) => {
   const [searchData, setSearchData] = useRecoilState(searchState);
-  const [postData, setPostData] = useRecoilState(postState);
-  const { register, handleSubmit, watch } = useForm();
-  const handleSearch = (data: any) => {
-    getPosts(`q=${data.search}`).then(data => {
+  const [_isLoading, setIsLoading] = useRecoilState(loadingState);
+  const [_postData, setPostData] = useRecoilState(postState);
+  const { register, handleSubmit, watch, setValue } = useForm();
+  const handleSearch = async (data: any) => {
+    setIsLoading(true);
+    await getPosts(`q=${data.search}`).then(data => {
       setPostData(data);
     });
+    setValue("search", "");
+    setIsLoading(false);
   };
   useEffect(() => {
     const subscription = watch(value => {
@@ -30,7 +34,6 @@ export const SearchBar = ({ className }: SearchBarProps) => {
         postType: value.postType as string,
         search: value.search as string,
       });
-      console.log(value);
     });
     return () => subscription.unsubscribe();
   }, [watch, setSearchData]);

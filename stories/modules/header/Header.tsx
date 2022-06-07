@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { User } from "../user/User";
 import userDefault from "../../../public/image/user_default.png";
 import { useRecoilState } from "recoil";
-import { userState } from "../../../store/states";
+import { loginState, userState } from "../../../store/states";
 
 interface HeaderProps {
   className?: string;
@@ -16,15 +16,17 @@ export const Header = ({ className }: HeaderProps) => {
   const router = useRouter();
   const [dropDown, setDropdown] = useState(false);
   const [userInfo, _setUserInfo] = useRecoilState(userState);
+  const [_isLogin, setIsLogin] = useRecoilState(loginState);
 
   const logout = () => {
     typeof window !== undefined && localStorage.setItem("token", "");
+    setIsLogin(false);
     router.push("/");
   };
 
   return (
     <header
-      className={`w-full bg-white border-b-[3px] border-b-solid border-b-header-border flex justify-center ${className}`}
+      className={`w-full px-4 bg-white border-b-[3px] border-b-solid border-b-header-border flex justify-center ${className}`}
     >
       <div className="max-w-[1200px] w-full flex justify-between py-3">
         <p
@@ -39,6 +41,7 @@ export const Header = ({ className }: HeaderProps) => {
           onMouseLeave={() => setDropdown(false)}
         >
           <User
+            id={userInfo._id}
             userName={userInfo.name}
             avatar={userInfo.avatar ?? userDefault}
             bottomLine
@@ -50,7 +53,7 @@ export const Header = ({ className }: HeaderProps) => {
           >
             <p
               className="py-2 border-b-2 border-b-solid border-b-dark text-center hover:bg-c-bg cursor-pointer"
-              onClick={() => router.push("/userWall")}
+              onClick={() => router.push(`/userWall/${userInfo._id}`)}
             >
               我的貼文牆
             </p>

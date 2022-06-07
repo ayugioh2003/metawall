@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import login from "../public/image/login.svg";
@@ -9,14 +8,13 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
 import { loadingState, loginState, userState } from "../store/states";
-import { useEffect } from "react";
 import { fetchLogin } from "../api/auth";
 import Swal from "sweetalert2";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [handlelLogin, setHandlelLogin] = useRecoilState(loginState);
+  const [_userInfo, setUserInfo] = useRecoilState(userState);
+  const [_isLogin, setIsLogin] = useRecoilState(loginState);
   const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const {
     register,
@@ -37,7 +35,7 @@ const Home: NextPage = () => {
       return;
     }
     setUserInfo(res.data.data.user);
-    setHandlelLogin({ isLogin: true });
+    setIsLogin(true);
     if (typeof window !== "undefined") {
       localStorage.setItem("token", res.data.data.token);
     }

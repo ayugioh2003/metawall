@@ -19,7 +19,7 @@ export const SettingButton = ({
 }: SettingButtonProps) => {
   return (
     <div
-      className={`${style.settingButton} flex ${className}`}
+      className={`cursor-pointer ${style.settingButton} flex ${className}`}
       onClick={onButtonClick}
     >
       <div
