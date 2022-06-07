@@ -40,9 +40,11 @@ interface UserInfo {
 const MessageItem = ({
   mes,
   userInfo,
+  scroll,
 }: {
   mes: Message;
   userInfo: UserInfo;
+  scroll: number;
 }) => {
   const [name, setName] = useState(false);
   const [nameStyle, setNameStyle] = useState({});
@@ -56,28 +58,28 @@ const MessageItem = ({
     if (nameRef?.current) {
       if (isUser) {
         setNameStyle({
-          top: `calc(${nameRef?.current?.offsetTop ?? 0}px + 8px)`,
+          top: `calc(${nameRef?.current?.offsetTop - scroll ?? 0}px + 8px)`,
           left: `calc(${nameRef?.current?.offsetLeft ?? 0}px + 48px)`,
         });
       } else {
         setNameStyle({
-          top: `calc(${nameRef?.current?.offsetTop ?? 0}px + 8px)`,
-          left: `calc(${nameRef?.current?.offsetLeft ?? 0}px - 88px)`,
+          top: `calc(${nameRef?.current?.offsetTop - scroll ?? 0}px + 8px)`,
+          right: 300,
         });
       }
     }
-  }, [nameRef?.current]);
+  }, [nameRef?.current, scroll]);
 
   useEffect(() => {
     if (timeRef?.current) {
       if (isUser) {
         setTimeStyle({
-          top: `calc(${timeRef?.current?.offsetTop ?? 0}px + 8px)`,
+          top: `calc(${timeRef?.current?.offsetTop - scroll ?? 0}px + 8px)`,
           left: `calc(${timeRef?.current?.offsetLeft ?? 0}px - 156px)`,
         });
       } else {
         setTimeStyle({
-          top: `calc(${timeRef?.current?.offsetTop ?? 0}px + 8px)`,
+          top: `calc(${timeRef?.current?.offsetTop - scroll ?? 0}px + 8px)`,
           left: `calc(${
             (timeRef?.current?.offsetLeft ?? 0) +
             (timeRef?.current?.offsetWidth ?? 0)
@@ -85,7 +87,7 @@ const MessageItem = ({
         });
       }
     }
-  }, [timeRef?.current]);
+  }, [timeRef?.current, scroll]);
 
   return (
     <li className={`flex items-center mb-1 ${isUser && "flex-row-reverse"}`}>
@@ -150,6 +152,7 @@ export const Chat = () => {
   const [value, setValue] = useState("");
   const [toast, setToast] = useState(false);
   const [oldMessage, setOldMessage] = useState(false);
+  const [scroll, setScroll] = useState(0);
   const websocket = useRef<WebSocket | null>(null);
   const router = useRouter();
 
@@ -244,7 +247,12 @@ export const Chat = () => {
                   即時群聊
                 </div>
                 <div className="relative">
-                  <ul className="h-[300px] overflow-y-auto py-4 px-2">
+                  <ul
+                    className="h-[300px] overflow-y-auto py-4 px-2"
+                    onScroll={(e: React.UIEvent<HTMLElement>) => {
+                      setScroll((e.target as HTMLElement).scrollTop);
+                    }}
+                  >
                     <div className="flex justify-center items-center mb-2">
                       <button
                         className="bg-primary font-medium p-2 rounded-md text-white"
@@ -259,6 +267,7 @@ export const Chat = () => {
                           <MessageItem
                             mes={mesData}
                             userInfo={userInfo}
+                            scroll={scroll}
                             key={index}
                           />
                         ))}
@@ -266,7 +275,12 @@ export const Chat = () => {
                       </>
                     )}
                     {message.map((mes, index) => (
-                      <MessageItem mes={mes} userInfo={userInfo} key={index} />
+                      <MessageItem
+                        mes={mes}
+                        userInfo={userInfo}
+                        scroll={scroll}
+                        key={index}
+                      />
                     ))}
                   </ul>
                 </div>
