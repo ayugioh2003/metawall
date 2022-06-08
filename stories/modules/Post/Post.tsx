@@ -31,6 +31,7 @@ export const Post = ({
   const { register, handleSubmit, setValue } = useForm();
   const [loading, setLoading] = useState(false);
   const [commentData, setCommentData] = useState(comments);
+  const [open, setOpen] = useState(false);
   const handleCommand = async (data: any) => {
     const { commentContent } = data;
     const addComment = await fetchAddComment({
@@ -73,14 +74,34 @@ export const Post = ({
       />
       <p className="mb-4">{content}</p>
       {image && (
-        <div className="relative h-[157px] mb-5">
-          <Image
-            src={image ?? "/"}
-            layout="fill"
-            objectFit="cover"
-            alt="postImage"
-          />
-        </div>
+        <>
+          <div
+            className="relative h-[157px] mb-5 cursor-pointer"
+            onClick={() => setOpen(true)}
+          >
+            <Image
+              src={image ?? "/"}
+              layout="fill"
+              objectFit="cover"
+              alt="postImage"
+            />
+          </div>
+          {open && (
+            <div
+              className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black/30 z-20"
+              onClick={() => setOpen(false)}
+            >
+              <div className="w-[90vw] h-[90vh] relative flex justify-center items-center">
+                <Image
+                  src={image ?? "/"}
+                  layout="fill"
+                  objectFit="contain"
+                  alt="postImage"
+                />
+              </div>
+            </div>
+          )}
+        </>
       )}
       {_id && likes && (
         <LikeButton

@@ -113,13 +113,15 @@ const Register: NextPage = () => {
               <Button
                 type="submit"
                 label="註冊"
-                className="my-4"
+                className="my-4 cursor-pointer"
                 disable={!isValid}
               />
             </form>
 
             <Link href="/">
-              <span className="text-dark">已有帳號？前往登入</span>
+              <span className="text-dark cursor-pointer">
+                已有帳號？前往登入
+              </span>
             </Link>
           </div>
         </div>

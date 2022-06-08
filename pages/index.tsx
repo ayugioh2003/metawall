@@ -88,7 +88,7 @@ const Home: NextPage = () => {
               <Button type="submit" label="登入" className="my-4" />
             </form>
             <Link href="/register">
-              <span className="text-dark">註冊帳號</span>
+              <span className="text-dark cursor-pointer">註冊帳號</span>
             </Link>
           </div>
         </div>
