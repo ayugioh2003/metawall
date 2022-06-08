@@ -62,7 +62,10 @@ export const User = ({
           bottomLine ? "border-b-2 border-b-solid border-b-dark" : ""
         }`}
       >
-        <p className="font-bold hover:text-primary hover:underline">
+        <p
+          className="font-bold cursor-pointer hover:text-primary hover:underline"
+          onClick={() => router.push(`/userWall/${id}`)}
+        >
           {userName}
         </p>
         {date && (
@@ -70,7 +73,9 @@ export const User = ({
             {dayjs(date).format("YYYY/MM/DD HH:mm")}
           </p>
         )}
-        {followTime && <p className="text-xs text-light">追蹤時間：{followTime}</p>}
+        {followTime && (
+          <p className="text-xs text-light">追蹤時間：{followTime}</p>
+        )}
         {postCreateAt && (
           <p className="text-xs text-light">
             發文時間：{dayjs(postCreateAt).format("YYYY/MM/DD HH:mm")}

@@ -54,14 +54,14 @@ export const LikePostPage: NextPage = () => {
                     className="flex justify-between items-center border-2 border-solid border-dark border-b-4 bg-white rounded-lg p-4 mb-4"
                   >
                     <User
-                      id={post._id}
+                      id={post.user.id}
                       userName={post.user.name}
                       postCreateAt={post.createdAt}
                       avatar={post.user.avatar}
                     />
-                    <ul className="flex mr-6">
+                    <ul className="flex">
                       <li
-                        className="flex flex-col mr-9 cursor-pointer"
+                        className="flex flex-col cursor-pointer"
                         onClick={() =>
                           togglePostLike({
                             postId: post._id ?? "",
@@ -72,10 +72,10 @@ export const LikePostPage: NextPage = () => {
                         <LikeOutlined className="text-xl mb-1" />
                         <p className="text-dark text-sm font-bold">取消</p>
                       </li>
-                      <li className="flex flex-col">
+                      {/* <li className="flex flex-col">
                         <RightCircleOutlined className="text-xl mb-1" />
                         <p className="text-dark text-sm font-bold">查看</p>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 )
