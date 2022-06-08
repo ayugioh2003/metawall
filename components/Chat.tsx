@@ -12,6 +12,7 @@ import Image from "next/image";
 import userDefault from "../public/image/user_default.png";
 import dayjs from "dayjs";
 import { fetchMessages } from "../api/message";
+import { useRouter } from "next/router";
 
 enum MessageType {
   GLOBAL_MESSAGE = "global-message",
@@ -39,9 +40,11 @@ interface UserInfo {
 const MessageItem = ({
   mes,
   userInfo,
+  scroll,
 }: {
   mes: Message;
   userInfo: UserInfo;
+  scroll: number;
 }) => {
   const [name, setName] = useState(false);
   const [nameStyle, setNameStyle] = useState({});
@@ -55,28 +58,28 @@ const MessageItem = ({
     if (nameRef?.current) {
       if (isUser) {
         setNameStyle({
-          top: `calc(${nameRef?.current?.offsetTop ?? 0}px + 8px)`,
+          top: `calc(${nameRef?.current?.offsetTop - scroll ?? 0}px + 8px)`,
           left: `calc(${nameRef?.current?.offsetLeft ?? 0}px + 48px)`,
         });
       } else {
         setNameStyle({
-          top: `calc(${nameRef?.current?.offsetTop ?? 0}px + 8px)`,
-          left: `calc(${nameRef?.current?.offsetLeft ?? 0}px - 88px)`,
+          top: `calc(${nameRef?.current?.offsetTop - scroll ?? 0}px + 8px)`,
+          right: 300,
         });
       }
     }
-  }, [nameRef?.current]);
+  }, [nameRef?.current, scroll]);
 
   useEffect(() => {
     if (timeRef?.current) {
       if (isUser) {
         setTimeStyle({
-          top: `calc(${timeRef?.current?.offsetTop ?? 0}px + 8px)`,
+          top: `calc(${timeRef?.current?.offsetTop - scroll ?? 0}px + 8px)`,
           left: `calc(${timeRef?.current?.offsetLeft ?? 0}px - 156px)`,
         });
       } else {
         setTimeStyle({
-          top: `calc(${timeRef?.current?.offsetTop ?? 0}px + 8px)`,
+          top: `calc(${timeRef?.current?.offsetTop - scroll ?? 0}px + 8px)`,
           left: `calc(${
             (timeRef?.current?.offsetLeft ?? 0) +
             (timeRef?.current?.offsetWidth ?? 0)
@@ -84,7 +87,7 @@ const MessageItem = ({
         });
       }
     }
-  }, [timeRef?.current]);
+  }, [timeRef?.current, scroll]);
 
   return (
     <li className={`flex items-center mb-1 ${isUser && "flex-row-reverse"}`}>
@@ -96,6 +99,7 @@ const MessageItem = ({
           onMouseLeave={() => setName(false)}
         >
           <Image
+            className="rounded-full"
             src={
               mes.user.avatar && mes.user.avatar !== " "
                 ? mes.user.avatar
@@ -148,16 +152,22 @@ export const Chat = () => {
   const [value, setValue] = useState("");
   const [toast, setToast] = useState(false);
   const [oldMessage, setOldMessage] = useState(false);
+  const [scroll, setScroll] = useState(0);
   const websocket = useRef<WebSocket | null>(null);
+  const router = useRouter();
 
-  useEffect(() => {
-    if (!isLogin) {
-      return;
-    }
+  const getOldMessage = () => {
     fetchMessages().then(data => {
       setMessageData(data);
     });
-  }, [isLogin]);
+  };
+
+  useEffect(() => {
+    if (!isLogin || router.pathname === "/") {
+      return;
+    }
+    getOldMessage();
+  }, [isLogin, router]);
 
   useEffect(() => {
     if (!toast) {
@@ -168,7 +178,18 @@ export const Chat = () => {
   }, [toast]);
 
   useEffect(() => {
-    if (!isLogin || isConnect) {
+    if (!isLogin) {
+      setIsConnect(false);
+      if (websocket?.current) {
+        websocket.current.send(
+          JSON.stringify({
+            isClose: true,
+          })
+        );
+      }
+      return;
+    }
+    if (isConnect) {
       return;
     }
     websocket.current = new WebSocket(
@@ -193,6 +214,9 @@ export const Chat = () => {
   }, [isLogin, isConnect]);
 
   const sendMessage = () => {
+    if (!value) {
+      return;
+    }
     if (websocket?.current) {
       websocket.current.send(
         JSON.stringify({
@@ -206,6 +230,7 @@ export const Chat = () => {
           createdAt: dayjs().valueOf(),
         })
       );
+      setValue("");
     }
   };
 
@@ -225,7 +250,12 @@ export const Chat = () => {
                   即時群聊
                 </div>
                 <div className="relative">
-                  <ul className="h-[300px] overflow-y-auto py-4 px-2">
+                  <ul
+                    className="h-[300px] overflow-y-auto py-4 px-2"
+                    onScroll={(e: React.UIEvent<HTMLElement>) => {
+                      setScroll((e.target as HTMLElement).scrollTop);
+                    }}
+                  >
                     <div className="flex justify-center items-center mb-2">
                       <button
                         className="bg-primary font-medium p-2 rounded-md text-white"
@@ -240,6 +270,7 @@ export const Chat = () => {
                           <MessageItem
                             mes={mesData}
                             userInfo={userInfo}
+                            scroll={scroll}
                             key={index}
                           />
                         ))}
@@ -247,13 +278,20 @@ export const Chat = () => {
                       </>
                     )}
                     {message.map((mes, index) => (
-                      <MessageItem mes={mes} userInfo={userInfo} key={index} />
+                      <MessageItem
+                        mes={mes}
+                        userInfo={userInfo}
+                        scroll={scroll}
+                        key={index}
+                      />
                     ))}
                   </ul>
                 </div>
                 <div className="flex">
-                  <Input
+                  <input
                     value={value}
+                    placeholder="請輸入聊天訊息"
+                    className={`input border-2 border-solid border-dark rounded-none w-full pl-6 h-12 `}
                     onChange={e => setValue(e.target.value)}
                   />
                   <div>

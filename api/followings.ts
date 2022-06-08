@@ -2,10 +2,6 @@ import axios from "../utils/axiosConfig";
 import Swal from "sweetalert2";
 
 const path = "/api/followings";
-let token: string | null = "";
-if (typeof window !== "undefined") {
-  token = localStorage.getItem("token");
-}
 
 interface ToggleFollowParam {
   userId: string;
@@ -13,29 +9,36 @@ interface ToggleFollowParam {
 }
 
 export async function getFollowings(userId?: string) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   return await axios
-    .get(
-      `${path}${userId ? `?user_id=${userId}` : ''}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+    .get(`${path}${userId ? `?user_id=${userId}` : ""}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(response => response.data.data)
     .catch(error => {
       console.log(error);
     });
 }
 
-export async function toggleFollow({ userId, changeToFollow }: ToggleFollowParam) {
-  return await axios(
-    `${path}/${userId}`,
-    {
-      method: changeToFollow ? "POST" : "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+export async function toggleFollow({
+  userId,
+  changeToFollow,
+}: ToggleFollowParam) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+  return await axios(`${path}/${userId}`, {
+    method: changeToFollow ? "POST" : "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
     .then(res => res.data.data)
     .catch(error => {
       console.log(error);

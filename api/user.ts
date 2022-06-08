@@ -2,12 +2,12 @@ import axios from "../utils/axiosConfig";
 import Swal from "sweetalert2";
 
 const path = "/api/users";
-let token: string | null = "";
-if (typeof window !== "undefined") {
-  token = localStorage.getItem("token");
-}
 
-export async function fetchUser(userId:string) {
+export async function fetchUser(userId: string) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   return await axios
     .get(`${path}/${userId}`, {
       headers: {
@@ -19,6 +19,10 @@ export async function fetchUser(userId:string) {
 }
 
 export async function fetchCurrentUser() {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   return await axios
     .get(`${path}/current-userinfo`, {
       headers: {
@@ -30,6 +34,10 @@ export async function fetchCurrentUser() {
 }
 
 export async function resetPassword(data: any) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   return await axios
     .patch(`${path}/reset-password`, data, {
       headers: {
@@ -42,7 +50,7 @@ export async function resetPassword(data: any) {
         text: "修改密碼成功",
         icon: "success",
         confirmButtonText: "我知道了",
-      })
+      });
     })
     .catch(error => {
       console.log(error);
@@ -56,6 +64,10 @@ export async function resetPassword(data: any) {
 }
 
 export async function resetUserinfo(data: any) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   return await axios
     .patch(`${path}/current-userinfo`, data, {
       headers: {
