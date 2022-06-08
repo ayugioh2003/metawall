@@ -12,6 +12,7 @@ import { PostProps } from "../post";
 import { ToggleLikeParam } from "../post";
 import { getPosts } from "../../api/posts";
 import { getFollowings, toggleFollow } from "../../api/followings";
+import { toggleLike } from "../../api/likes";
 import Swal from "sweetalert2";
 
 export const UserWallPage: NextPage = () => {
@@ -29,7 +30,9 @@ export const UserWallPage: NextPage = () => {
   });
 
   const togglePostLike = async ({ postId, changeToLike }: ToggleLikeParam) => {
-    console.log(postId, changeToLike);
+    setIsLoading(true);
+    await toggleLike({ postId, changeToLike }).then(data => fetchPost());
+    setIsLoading(false);
   };
 
   const fetchUserData = useCallback(
@@ -103,6 +106,7 @@ export const UserWallPage: NextPage = () => {
             {postData.map((data: PostProps) => (
               <Post
                 key={data._id}
+                _id={data?._id}
                 user={data.user}
                 content={data.content}
                 image={data.image}
