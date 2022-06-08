@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { StaticImageData } from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import dayjs from "dayjs";
 import { Header } from "../stories/modules/header/Header";
@@ -8,6 +9,15 @@ import { User } from "../stories/modules/user/User";
 import { useRecoilState } from "recoil";
 import { followListState, loadingState } from "../store/states";
 import { getFollowings } from "../api/followings";
+
+
+export interface FollowProps {
+  _id: string;
+  name: string;
+  avatar: string | StaticImageData;
+  followTime: string;
+  followDays: number;
+}
 
 export const FollowListPage: NextPage = () => {
   const [options, _setOptions] = useState([]);
@@ -21,7 +31,7 @@ export const FollowListPage: NextPage = () => {
         setFollowList(res[0].followings.map((x: any) => {
           const differTime = (new Date()).getTime() - (new Date(Number(x.createdAt))).getTime();
           return ({
-            id: x.user.id,
+            _id: x.user.id,
             name: x.user.name,
             avatar: x.user.avatar,
             followTime: x.createdAt,
@@ -44,13 +54,13 @@ export const FollowListPage: NextPage = () => {
         <main className="max-w-[1200px] w-full flex justify-between">
           <div className="w-3/4 pr-7">
             <Title text="追蹤名單" className="mb-8" />
-            {followList.map(follow => (
+            {followList.length > 0 &&followList.map((follow:FollowProps) => (
               <div
                 key={follow.name}
                 className="flex justify-between items-center border-2 border-solid border-dark border-b-4 bg-white rounded-lg p-4 mb-4"
               >
                 <User
-                  id={follow.id}
+                  id={follow._id}
                   userName={follow.name}
                   followTime={dayjs(Number(follow.followTime)).format("YYYY/MM/DD HH:mm")}
                   avatar={follow.avatar}

@@ -41,13 +41,7 @@ export const postState = atom({
 
 export const followListState = atom({
   key: "followListState",
-  default: [{
-      id: '',
-      name: '',
-      avatar: '',
-      followTime: '',
-      followDays: 0,
-  }],
+  default: [],
 });
 
 export const likePostState = atom({
