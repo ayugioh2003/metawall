@@ -10,20 +10,20 @@ import { useRecoilState } from "recoil";
 import { loadingState, postState } from "../../store/states";
 import { PostProps } from "../post";
 import { ToggleLikeParam } from "../post";
-import { fetchUser } from "../../api/user";
 import { getPosts } from "../../api/posts";
+import { getFollowings } from "../../api/followings";
 
 export const UserWallPage: NextPage = () => {
   const router = useRouter();
   const { userId } = router.query;
   const [_isLoading, setIsLoading] = useRecoilState(loadingState);
-  const [options, setOptions] = useState([]);
+  const [options, _setOptions] = useState([]);
   const [postData, setPostData] = useRecoilState(postState);
   const [userData, setUserData] = useState({
     _id: '',
     name: '',
     avatar: '',
-    follower: 0,
+    followQuantity: 0,
   });
 
   const togglePostLike = async ({ postId, changeToLike }: ToggleLikeParam) => {
@@ -33,10 +33,17 @@ export const UserWallPage: NextPage = () => {
   const fetchUserData = useCallback(
     async () => {
       setIsLoading(true);
-      await fetchUser(userId as string).then(res => {
-        if (res && res.data)
-          setUserData(res.data.data);
-      });
+      await getFollowings(userId as string).then(res => {
+        if (res) {
+          const user = res[0];
+          setUserData({
+            _id: user._id,
+            name: user.name,
+            avatar: user.avatar,
+            followQuantity: user.followers.length,
+          });
+        }
+      })
       setIsLoading(false);
     }, [userId, setIsLoading]
   );
@@ -66,7 +73,7 @@ export const UserWallPage: NextPage = () => {
               userId={userData._id}
               src={userData.avatar}
               followName={userData.name}
-              followQuantity={userData.follower || 0}
+              followQuantity={userData.followQuantity || 0}
               className="mb-4"
             />
             <SearchBar />

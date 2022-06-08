@@ -12,10 +12,10 @@ interface ToggleFollowParam {
   changeToFollow: boolean;
 }
 
-export async function getFollowings() {
+export async function getFollowings(userId?: string) {
   return await axios
     .get(
-      `${path}`,
+      `${path}${userId ? `?user_id=${userId}` : ''}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
