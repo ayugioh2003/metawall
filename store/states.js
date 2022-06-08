@@ -29,6 +29,8 @@ export const userState = atom({
     password: "1234qwer",
     avatar: "https://mopcon.org/api/2019/speaker/images/web/speaker_38",
     gender: "male",
+    followings: [],
+    followers: [],
   },
 });
 
@@ -39,47 +41,7 @@ export const postState = atom({
 
 export const followListState = atom({
   key: "followListState",
-  default: [
-    {
-      id: "1",
-      userName: "波吉",
-      userIcon: user1,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      followTime: dayjs().format("DD"),
-      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-    {
-      id: "2",
-      userName: "多魯米",
-      userIcon: user51,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      followTime: dayjs().format("DD"),
-      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-    {
-      userName: "卡克",
-      userIcon: user4,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      followTime: dayjs().format("DD"),
-      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-    {
-      id: "3",
-      userName: "希琳",
-      userIcon: user5,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      followTime: dayjs().format("DD"),
-      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-    {
-      id: "4",
-      userName: "多瑪斯",
-      userIcon: user1,
-      date: dayjs().format("YYYY/MM/DD HH:mm"),
-      followTime: dayjs().format("DD"),
-      followFromTime: dayjs().format("YYYY/MM/DD HH:mm"),
-    },
-  ],
+  default: [],
 });
 
 export const likePostState = atom({

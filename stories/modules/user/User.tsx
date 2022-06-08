@@ -13,7 +13,7 @@ interface UserProps {
   date?: string;
   bottomLine?: boolean;
   className?: string;
-  follow?: string;
+  followTime?: string;
   postCreateAt?: string;
 }
 
@@ -29,7 +29,7 @@ export const User = ({
   bottomLine,
   date,
   className,
-  follow,
+  followTime,
   postCreateAt,
 }: UserProps) => {
   const router = useRouter();
@@ -70,7 +70,7 @@ export const User = ({
             {dayjs(date).format("YYYY/MM/DD HH:mm")}
           </p>
         )}
-        {follow && <p className="text-xs text-light">您已追蹤{follow}天</p>}
+        {followTime && <p className="text-xs text-light">追蹤時間：{followTime}</p>}
         {postCreateAt && (
           <p className="text-xs text-light">
             發文時間：{dayjs(postCreateAt).format("YYYY/MM/DD HH:mm")}

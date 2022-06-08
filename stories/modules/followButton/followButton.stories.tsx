@@ -21,11 +21,7 @@ const Template: ComponentStory<typeof FollowButton> = args => (
 
 export const Follow = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Follow.args = {
-  type: "follow",
-};
+Follow.args = {};
 
 export const UnFollow = Template.bind({});
-UnFollow.args = {
-  type: "unfollow",
-};
+UnFollow.args = {};

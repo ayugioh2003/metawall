@@ -1,8 +1,7 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-
 import { FollowTitle } from "./FollowTitle";
-import user5 from "../../../public/image/user5-1.png";
+import userDefault from "../../../public/image/user_default.png";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -23,7 +22,7 @@ const Template: ComponentStory<typeof FollowTitle> = args => (
 export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
-  src: user5,
+  src: userDefault,
   followName: "阿爾敏",
-  followQuantity: "987,987",
+  followQuantity: 99999,
 };

@@ -3,6 +3,21 @@ import Swal from "sweetalert2";
 
 const path = "/api/users";
 
+export async function fetchUser(userId: string) {
+  let token: string | null = "";
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
+  return await axios
+    .get(`${path}/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then(response => response)
+    .catch(error => error);
+}
+
 export async function fetchCurrentUser() {
   let token: string | null = "";
   if (typeof window !== "undefined") {
