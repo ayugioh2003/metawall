@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import Image, { StaticImageData } from "next/image";
 import { useRecoilState } from "recoil";
 import { userState, loadingState } from "../../../store/states";
@@ -13,6 +13,9 @@ interface FollowTitleProps {
   followName: string;
   followQuantity: number;
   className?: string;
+  type: "follow" | "unfollow";
+  setType: (type: "follow" | "unfollow") => void;
+  changeFollow: () => void;
 }
 
 /**
@@ -24,10 +27,12 @@ export const FollowTitle = ({
   followName,
   followQuantity,
   className,
+  type,
+  setType,
+  changeFollow,
 }: FollowTitleProps) => {
   const [userInfo, _setUserInfo] = useRecoilState(userState);
   const [_isLoading, setIsLoading] = useRecoilState(loadingState);
-  const [type, setType] = useState<"follow" | "unfollow">("follow");
   const size = '76px'
 
   const fetchFollowing = useCallback(async () => {
@@ -75,7 +80,7 @@ export const FollowTitle = ({
         {userInfo._id !== userId &&
           <div>
             <DonateButton userId={userId} userName={followName} />
-            <FollowButton userId={userId} type={type} setType={setType} />
+            <FollowButton type={type} changeFollow={changeFollow} />
           </div>
         }
       </div>

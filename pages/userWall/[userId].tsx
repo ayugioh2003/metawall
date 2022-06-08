@@ -11,7 +11,8 @@ import { loadingState, postState } from "../../store/states";
 import { PostProps } from "../post";
 import { ToggleLikeParam } from "../post";
 import { getPosts } from "../../api/posts";
-import { getFollowings } from "../../api/followings";
+import { getFollowings, toggleFollow } from "../../api/followings";
+import Swal from "sweetalert2";
 
 export const UserWallPage: NextPage = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ export const UserWallPage: NextPage = () => {
   const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const [options, _setOptions] = useState([]);
   const [postData, setPostData] = useRecoilState(postState);
+  const [type, setType] = useState<"follow" | "unfollow">("follow");
   const [userData, setUserData] = useState({
     _id: '',
     name: '',
@@ -63,6 +65,24 @@ export const UserWallPage: NextPage = () => {
     fetchPost();
   }, [fetchUserData, fetchPost])
 
+  const changeFollow = async () => {
+    setIsLoading(true);
+    await toggleFollow({ userId: userData._id, changeToFollow: type === "follow" })
+      .then(async res => {
+        if (res) {
+          setType(type === "follow" ? "unfollow" : "follow")
+          fetchUserData();
+          Swal.fire({
+            title: "Success!",
+            text: "變更追蹤成功",
+            icon: "success",
+            confirmButtonText: "我知道了",
+          });
+        }
+      });
+    setIsLoading(false);
+  }
+
   return (
     <>
       <Header />
@@ -75,6 +95,9 @@ export const UserWallPage: NextPage = () => {
               followName={userData.name}
               followQuantity={userData.followQuantity || 0}
               className="mb-4"
+              type={type}
+              setType={setType}
+              changeFollow={changeFollow}
             />
             <SearchBar />
             {postData.map((data: PostProps) => (

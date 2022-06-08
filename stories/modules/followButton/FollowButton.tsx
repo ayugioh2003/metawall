@@ -1,43 +1,19 @@
 import React from "react";
-import { useRecoilState } from "recoil";
-import { loadingState } from "../../../store/states";
-import { toggleFollow } from "../../../api/followings";
-import Swal from "sweetalert2";
 
 interface FollowButtonProps {
-  userId: string;
   className?: string;
   type: "follow" | "unfollow";
-  setType: (type: "follow" | "unfollow") => void;
+  changeFollow: () => void;
 }
 
 /**
  * Primary UI component for user interaction
  */
 export const FollowButton = ({
-  userId,
   className,
   type,
-  setType,
+  changeFollow,
 }: FollowButtonProps) => {
-  const [_isLoading, setIsLoading] = useRecoilState(loadingState);
-
-  const changeFollow = async () => {
-    setIsLoading(true);
-    await toggleFollow({ userId, changeToFollow: type === "follow" })
-      .then(async res => {
-        if (res) {
-          setType(type === "follow" ? "unfollow" : "follow")
-          Swal.fire({
-            title: "Success!",
-            text: "變更追蹤成功",
-            icon: "success",
-            confirmButtonText: "我知道了",
-          });
-        }
-      });
-    setIsLoading(false);
-  }
 
   return (
     <button
