@@ -5,6 +5,7 @@ import {
   connectState,
   loginState,
   messageState,
+  toastState,
   userState,
 } from "../store/states";
 import { Input } from "../stories/modules/input/Input";
@@ -150,7 +151,7 @@ export const Chat = () => {
   const [messageData, setMessageData] = useRecoilState(messageState);
   const [message, setMessage] = useState<any[]>([]);
   const [value, setValue] = useState("");
-  const [toast, setToast] = useState(false);
+  const [toast, setToast] = useRecoilState(toastState);
   const [oldMessage, setOldMessage] = useState(false);
   const [scroll, setScroll] = useState(0);
   const websocket = useRef<WebSocket | null>(null);
@@ -173,7 +174,7 @@ export const Chat = () => {
     if (!toast) {
       return;
     }
-    const time = setTimeout(() => setToast(false), 5000);
+    const time = setTimeout(() => setToast(""), 5000);
     return () => clearTimeout(time);
   }, [toast]);
 
@@ -240,7 +241,9 @@ export const Chat = () => {
         <div className="fixed bottom-12 left-[calc(80vw_-_72px)] z-10">
           {toast && (
             <div className="fixed top-32 left-0 w-screen flex justify-center">
-              <p className="p-2 bg-[#EEC32A] rounded-md">{toast}</p>
+              <p className="p-4 bg-[#EEC32A] rounded-md whitespace-pre shadow-lg">
+                {toast}
+              </p>
             </div>
           )}
           <div className="relative">
