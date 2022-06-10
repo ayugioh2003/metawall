@@ -17,7 +17,7 @@ import Swal from "sweetalert2";
 
 export const UserWallPage: NextPage = () => {
   const router = useRouter();
-  const { userId, donateFrom, comment, amt } = router.query;
+  const { userId, donateFrom, donateTo, comment, amt } = router.query;
   const [_toast, setToast] = useRecoilState(toastState);
   const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const [options, _setOptions] = useState([]);
@@ -67,7 +67,7 @@ export const UserWallPage: NextPage = () => {
 
   useEffect(() => {
     if (donateFrom && amt && comment) {
-      setToast(`成功贊助${donateFrom} ${amt} 元\n${comment}`);
+      setToast(`${donateFrom}成功贊助${donateTo} ${amt} 元\n${comment}`);
       router.replace(`/userWall/${userId}`);
     }
   }, []);
