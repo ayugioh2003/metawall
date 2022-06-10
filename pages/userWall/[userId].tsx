@@ -7,7 +7,7 @@ import { Post } from "../../stories/modules/Post/Post";
 import { FollowTitle } from "../../stories/modules/followTitle/FollowTitle";
 import { SearchBar } from "../../stories/modules/searchBar/SearchBar";
 import { useRecoilState } from "recoil";
-import { loadingState, postState } from "../../store/states";
+import { loadingState, postState, toastState } from "../../store/states";
 import { PostProps } from "../post";
 import { ToggleLikeParam } from "../post";
 import { getPosts } from "../../api/posts";
@@ -17,15 +17,16 @@ import Swal from "sweetalert2";
 
 export const UserWallPage: NextPage = () => {
   const router = useRouter();
-  const { userId } = router.query;
+  const { userId, donateFrom, donateTo, comment, amt } = router.query;
+  const [_toast, setToast] = useRecoilState(toastState);
   const [_isLoading, setIsLoading] = useRecoilState(loadingState);
   const [options, _setOptions] = useState([]);
   const [postData, setPostData] = useRecoilState(postState);
   const [type, setType] = useState<"follow" | "unfollow">("follow");
   const [userData, setUserData] = useState({
-    _id: '',
-    name: '',
-    avatar: '',
+    _id: "",
+    name: "",
+    avatar: "",
     followQuantity: 0,
   });
 
@@ -35,56 +36,61 @@ export const UserWallPage: NextPage = () => {
     setIsLoading(false);
   };
 
-  const fetchUserData = useCallback(
-    async () => {
-      setIsLoading(true);
-      await getFollowings(userId as string).then(res => {
-        if (res) {
-          const user = res[0];
-          setUserData({
-            _id: user._id,
-            name: user.name,
-            avatar: user.avatar,
-            followQuantity: user.followers.length,
-          });
-        }
-      })
-      setIsLoading(false);
-    }, [userId, setIsLoading]
-  );
+  const fetchUserData = useCallback(async () => {
+    setIsLoading(true);
+    await getFollowings(userId as string).then(res => {
+      if (res) {
+        const user = res[0];
+        setUserData({
+          _id: user._id,
+          name: user.name,
+          avatar: user.avatar,
+          followQuantity: user.followers.length,
+        });
+      }
+    });
+    setIsLoading(false);
+  }, [userId, setIsLoading]);
 
-  const fetchPost = useCallback(
-    async () => {
-      setIsLoading(true);
-      await getPosts(`user_id=${userId}`).then(data => {
-        setPostData(data);
-      });
-      setIsLoading(false);
-    }, [userId, setIsLoading, setPostData]
-  );
+  const fetchPost = useCallback(async () => {
+    setIsLoading(true);
+    await getPosts(`user_id=${userId}`).then(data => {
+      setPostData(data);
+    });
+    setIsLoading(false);
+  }, [userId, setIsLoading, setPostData]);
 
   useEffect(() => {
     fetchUserData();
     fetchPost();
-  }, [fetchUserData, fetchPost])
+  }, [fetchUserData, fetchPost]);
+
+  useEffect(() => {
+    if (donateFrom && amt && comment) {
+      setToast(`${donateFrom}成功贊助${donateTo} ${amt} 元\n${comment}`);
+      router.replace(`/userWall/${userId}`);
+    }
+  }, []);
 
   const changeFollow = async () => {
     setIsLoading(true);
-    await toggleFollow({ userId: userData._id, changeToFollow: type === "follow" })
-      .then(async res => {
-        if (res) {
-          setType(type === "follow" ? "unfollow" : "follow")
-          fetchUserData();
-          Swal.fire({
-            title: "Success!",
-            text: "變更追蹤成功",
-            icon: "success",
-            confirmButtonText: "我知道了",
-          });
-        }
-      });
+    await toggleFollow({
+      userId: userData._id,
+      changeToFollow: type === "follow",
+    }).then(async res => {
+      if (res) {
+        setType(type === "follow" ? "unfollow" : "follow");
+        fetchUserData();
+        Swal.fire({
+          title: "Success!",
+          text: "變更追蹤成功",
+          icon: "success",
+          confirmButtonText: "我知道了",
+        });
+      }
+    });
     setIsLoading(false);
-  }
+  };
 
   return (
     <>

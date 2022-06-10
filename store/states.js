@@ -73,3 +73,8 @@ export const messageState = atom({
   key: "messageState",
   default: [],
 });
+
+export const toastState = atom({
+  key: "toastState",
+  default: "",
+});
